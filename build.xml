@@ -1,56 +1,45 @@
-<project name="KlondikeSolitaire" basedir="." default="main">
-    <property name="src.dir"     value="src"/>
-    <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
-    <property name="test.dir"    value="${src.dir}/tests"/>
-    <property name="main-class"  value="src.cmdl.CommandLineKlondike"/>    
-    <property name="test-class"  value="src.tests.KlondikeTester"/>
-    <property name="lib.dir"	 value="lib"/>
-    <path id="classpath.project">
-        <pathelement location="lib/junit-4.12.jar"/>
-        <pathelement location="lib/hamcrest-core-1.3.jar"/>
-        <pathelement location="build"/>
-        <pathelement location="src/tests"/>
-    </path>
-
+<?xml version="1.0" encoding="utf-8"?>
+<project name="KlondikeSolitaire" default="compile" basedir=".">
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="lib" location="lib"/>
+    <property name="dist" location="dest-client"/>
+    
     <target name="clean">
-        <delete dir="${build.dir}"/>
+        <delete dir="${build}"/>
+    </target>    
+    
+    <target name="compilesrc">
+        <mkdir dir="${build}"/>        
+        <javac srcdir="${src}" destdir="${build}" classpath="${lib}/hamcrest-core-1.3.jar:${lib}/junit-4.12.jar:${src}" includeantruntime="false" />
     </target>
 
-    <target name="compile">
-	<exec executable="make"/>
-	<!--<mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}">
-            <classpath refid="classpath.project"/>
-        </javac>!-->
-    </target>
-
-    <!--<target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+    <target name="compile" depends="clean,compilesrc">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/ija-client.jar" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Main-Class" value="src.view.MainVieW"/>
+                <!--<attribute name="Class-Path" value="lib/hamcrest-core-1.3.jar:lib/junit-4.12.jar"/>-->
             </manifest>
         </jar>
-    </target>-->
-    <!--<target name="runapp" depends="jar">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-    </target>-->
-
-    <target name="run" depends="compile">
-	<exec executable="make">
-    	    <arg value="test"/>
-	</exec>	
-	<!--<junit printsummary="on" haltonfailure="yes" fork="true">
-            <classpath refid="classpath.project"/>
-            <formatter type="brief" usefile="false"/>
-	    <batchtest>
-                <fileset dir="${test.dir}" includes="**/*Test*.java"/>
-            </batchtest>
-        </junit>-->
+        <mkdir dir="${dist}/lib"/>
+        <copy file="${lib}/hamcrest-core-1.3.jar" todir="${dist}/lib"/>
+        <copy file="${lib}/junit-4.12.jar" todir="${dist}/lib"/>
     </target>
 
-    <!--<target name="rebuild" depends="clean,jar"/>-->
-    <target name="main" depends="clean,run"/>
-</project>
+
+    
+    <target name="run">
+        <!--<junit haltonfailure="true" printsummary="true" >
+            <classpath location="${dist}/lib/junit-4.12.jar" />
+    		    <classpath location="${dist}/lib/hamcrest-core-1.3.jar" />
+            <classpath location="${dist}/ija-client.jar" />
+            <test name="ija.ija2016.homework2.HomeWork2Test"/>
+        </junit>-->
+    	
+
+        <java jar="${dist}/ija-client.jar" dir="${dist}" fork="true"/>
+    	
+    </target>
+
+</project>  
