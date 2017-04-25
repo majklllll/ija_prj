@@ -1,9 +1,13 @@
 package src.view;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import src.share.ICardDeck;
 import src.share.ICardStack;
+import src.controler.CommandMove;
+import src.controler.ICommand;
 import src.share.ICard;
 
 public class VisualCardDeck extends VisualAbstractDeck  {
@@ -14,21 +18,38 @@ public class VisualCardDeck extends VisualAbstractDeck  {
 	public void paint() {
 		
 		ICard stackCard = deck.top();
+		VisualCard cardVis;
+		
 		if(stackCard != null){
-			VisualCard cardVis = new VisualCard(VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y );
+			cardVis = new VisualCard(VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y );
 			
 			this.card = cardVis;
 			board.add(card);
 			
 		}else{
-			VisualCard cardVis = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
+			cardVis = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
 			
 			this.card = cardVis;
 			board.add(card);
 		}
 
 			
-			
+		cardVis.addMouseListener(new MouseAdapter()  
+		{  
+		    public void mouseClicked(MouseEvent e)  
+		    {  
+				if(board.isMoveSourceSelected()){
+					ICardDeck source = board.getSelectedMoveSource();
+					
+					ICommand command = new CommandMove(source, deck);
+					board.getCommandBuilder().execute(command);
+					
+					//deselect source
+					board.setSelectedMoveSource(null);
+					
+				}				    	
+		    }  
+		}); 	
 		
 		
 	}

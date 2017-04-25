@@ -34,6 +34,9 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	ArrayList<VisualCardStack> stacks = new ArrayList<VisualCardStack>();
 	
 	
+	private ICardDeck selectedSource;
+	
+	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -184,6 +187,16 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	public CommandBuilder getCommandBuilder(){
 		return commander;
 		
+	}
+	
+	public void setSelectedMoveSource(ICardDeck deck){
+		this.selectedSource = deck;		
+	}
+	public ICardDeck getSelectedMoveSource(){
+		return this.selectedSource;		
+	}
+	public boolean isMoveSourceSelected() {
+		return (this.selectedSource != null);				
 	}
 	
 	

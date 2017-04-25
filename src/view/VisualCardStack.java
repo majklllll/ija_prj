@@ -1,15 +1,19 @@
 package src.view;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import src.share.ICardDeck;
 import src.share.ICardStack;
+import src.controler.CommandMove;
+import src.controler.CommandNext;
+import src.controler.ICommand;
 import src.share.ICard;
 
 public class VisualCardStack extends VisualAbstractDeck {
 	ICardStack stack;
-	private ArrayList<VisualCard> cards = new ArrayList<VisualCard>();
-			
+		
 	public void paint() {
 		
 		//adding cards in reverse direction to ensure right card overlay
@@ -24,16 +28,37 @@ public class VisualCardStack extends VisualAbstractDeck {
 				
 			}
 			
-			
-			
-			
 			board.add(card);
-			cards.add(card);
 			
+			//card selected - move to stack
+			//no card selected yet - move from stack
+			if(i == stack.size() - 1 ) {
+				//for last card only
+				//add event handler - select card to move
+				card.addMouseListener(new MouseAdapter()  
+				{  
+				    public void mouseClicked(MouseEvent e)  
+				    {  
+						if(board.isMoveSourceSelected()){
+							ICardDeck source = board.getSelectedMoveSource();
+							
+							ICommand command = new CommandMove(source, stack);
+							board.getCommandBuilder().execute(command);
+							
+							board.setSelectedMoveSource(null);
+							
+						}else{
+					    	board.setSelectedMoveSource(stack);							
+						}				    	
+				    }  
+				}); 
 			
+			}
+
 		}
-		for(int i = 0; i < stack.size();i++) System.out.println(stack.get(i).value());
-		System.out.println();
+
+
+		
 		
 	}
 	public void setModel(ICardStack stackModel) {

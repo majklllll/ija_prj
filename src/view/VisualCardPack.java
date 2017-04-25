@@ -66,7 +66,16 @@ public class VisualCardPack extends VisualAbstractDeck {
         	ICard modelCard = pack.top();
         	VisualCard card = new VisualCard(VisualCard.VisualCardColor.visualColor(modelCard.color()), modelCard.value(), x, y  );
 			board.add(card);
-			cardDefer = card;        	
+			cardDefer = card; 
+			
+			//add event handler - select card to move
+			card.addMouseListener(new MouseAdapter()  
+			{  
+			    public void mouseClicked(MouseEvent e)  
+			    {  
+			    	board.setSelectedMoveSource(pack);
+			    }  
+			}); 
 			
         }else{
         	//there is no card
