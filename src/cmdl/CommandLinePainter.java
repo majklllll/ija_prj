@@ -44,6 +44,12 @@ public class CommandLinePainter implements ISupportRepaint{
     }
 
     public void repaint(){
+        // Check if game is finnished.
+        if(this.model.isGameOver()){
+            this.print("Game over: you won.\n");
+            return;
+        }
+
         // Print leading line with description.
         this.print("   r1\t                d1     d2     d3     d4 \n");
 
