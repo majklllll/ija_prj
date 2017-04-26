@@ -42,4 +42,6 @@ public interface IGameBoard{
     public boolean save(String fileName);
 
     public boolean load(String fileName);
+
+    public boolean isGameOver();
 }
