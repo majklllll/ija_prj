@@ -9,7 +9,7 @@
   * Project:    Solitaire Klondike Game
   * Proj. Num:  4
   * Version:    1
-  * Date:       11.04.2017
+  * Date:       26.04.2017
   * System:     GNU/Linux, x86_64, Ubuntu 16.04 LTS
   */
 package src.model;
@@ -31,6 +31,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class BoardModel implements IGameBoard{
+    private boolean gameOver                          = false;
     private ICardFactory factory                      = new CardModelFactory();
     protected ArrayList<ISupportRepaint> observers    = new ArrayList<ISupportRepaint>();
     protected ArrayList<ICardStack> stacks            = new ArrayList<ICardStack>();
@@ -62,6 +63,7 @@ public class BoardModel implements IGameBoard{
     }
 
     public void update(){
+        this.gameOver = this.checkGameOver();
         for(ISupportRepaint observer : this.observers)
             observer.repaint();
     }
@@ -201,5 +203,16 @@ public class BoardModel implements IGameBoard{
             return true;
         }
         return false;
+    }
+
+    public boolean checkGameOver(){
+        for(ICardDeck deck : this.decks)
+            if(deck.top().value() != ICard.ValueConvertor.King)
+                return false;
+        return true;
+    }
+
+    public boolean isGameOver(){
+        return this.gameOver;
     }
 }
