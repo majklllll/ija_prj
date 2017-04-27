@@ -12,6 +12,7 @@ import src.share.ICard;
 
 
 public class VisualCard extends JLabel {
+	private float opacity;
 	ICard.Color type;
 	int value;
 	VisualCard(VisualCard.VisualCardColor cardType, int cardValue, int x, int y) {
@@ -19,7 +20,8 @@ public class VisualCard extends JLabel {
 		
 		this.setIcon(icon);
 		this.setHorizontalAlignment(SwingConstants.CENTER);
-		this.setBounds(x, y, 145, 200);	
+		this.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+		
 		
 	}
     public static enum VisualCardColor{
@@ -50,4 +52,23 @@ public class VisualCard extends JLabel {
         	return CLUBS;
         }
     }
+    
+	public void setOpacity(float opacity) {
+	    this.opacity = opacity;
+	}
+
+	public float getOpacity(){
+	    return this.opacity;
+	}
+	
+	public void setSelected(){
+		//System.out.println("setting it");
+		this.setOpacity(0.5f);	
+		//super.repaint();
+		//this.revalidate();
+		
+	}
+	
+	
+	
 }

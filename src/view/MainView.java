@@ -1,27 +1,38 @@
 package src.view;
 
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.EventQueue;
+//import java.awt.Color;
 
-import javax.swing.ImageIcon;
+//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+//import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 import java.awt.GridLayout;
+//import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import src.view.VisualBoard;
-import src.controler.CommandBuilder;
-import src.controler.ICommand;
+//import src.controler.CommandBuilder;
+//import src.controler.ICommand;
 import src.model.BoardModel;
 
 
 public class MainView extends JFrame{
 	public static final int BOARD_LIMIT           = 4;
 	protected ArrayList<VisualBoard> boards       = new ArrayList<VisualBoard>(); 
-
+	private JPanel bottomPanel;
+	
+	private GridLayout layoutFull;
+	private GridLayout layout4Tiles;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -45,10 +56,34 @@ public class MainView extends JFrame{
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 700);
-		getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
+		getContentPane().setLayout(null);
+		
+		initLayouts();
+		
+		JPanel top = new JPanel(layoutFull);
+		top.setBounds(0, 0, 1280, 25);
+		
+		JPanel bottom = new JPanel(layoutFull);
+		bottom.setBounds(0, 25, 1280, 660);
+		
+		getContentPane().add(top);
+		getContentPane().add(bottom);
+		
+		this.bottomPanel = bottom;
+		
+		JButton btnNewGame = new JButton("Add new game");
+		top.add(btnNewGame);
+		
+		//add event handlers
+		btnNewGame.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        //your actions
+		    	addBoard();
+		    }
+		});
 		
 		
-
 		
 	}
 	
@@ -57,30 +92,38 @@ public class MainView extends JFrame{
 		if(boards.size() < BOARD_LIMIT) {
 			if(boards.size() == 1) {
 				//change layout to grid 2x2
-				getContentPane().setLayout(new GridLayout(2, 2, 0, 0));
+				this.changeLayout(layout4Tiles);
+				
 			}
-			
-			
 			
 			BoardModel boardModel = new BoardModel();
 			VisualBoard board = new VisualBoard(boardModel);
-			getContentPane().add(board);
+			this.bottomPanel.add(board);
 			boards.add(board);
 			
+			
+			this.forceRepaint();
 			//System.out.println(getContentPane().getSize());
 			
 		}	
-		
+		System.out.println(boards.size());
 	}
 
-	public void removeBoard(int number) {
+	public void removeBoard(VisualBoard board) {
 		if(boards.size() == 2) {
 			//change grid to 1x1
-			getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
+			this.changeLayout(layoutFull);
 		}
 		
+		//remove from the list
+		boards.remove(board);
 		
-		boards.remove(number);
+		//remove from GUI
+		board.removeAll();
+		this.bottomPanel.remove(board);
+		forceRepaint();
+		
+		System.out.println(boards.size());
 	}
 	
 	public VisualBoard getBoard(int number) {
@@ -88,7 +131,26 @@ public class MainView extends JFrame{
 		
 	}
 	
-
+	public void forceRepaint(){
+		this.repaint();
+		this.revalidate();	
+	}
+	
+	private void initLayouts() {
+		layoutFull = new GridLayout(1, 1, 0, 0);
+		layout4Tiles = new GridLayout(2, 2, 0, 0);
+		
+	}
+	
+	public void changeLayout(GridLayout layout){
+		this.bottomPanel.setLayout(layout);
+		
+		//inform icon provider about this change
+		VisualIcons.get().setUsingMiniatures((layout == this.layout4Tiles));
+	}
+	
+	
+	
 	
 }
 

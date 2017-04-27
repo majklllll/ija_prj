@@ -8,6 +8,7 @@ import src.share.ICardDeck;
 import src.share.ICardStack;
 import src.controler.CommandMove;
 import src.controler.CommandNext;
+import src.controler.CommandMoveMulti;
 import src.controler.ICommand;
 import src.share.ICard;
 
@@ -15,16 +16,17 @@ public class VisualCardStack extends VisualAbstractDeck {
 	ICardStack stack;
 		
 	public void paint() {
+		int distance = VisualIcons.get().areIconsMinified() ? 15 : 30;
 		
 		//adding cards in reverse direction to ensure right card overlay
 		for(int i = stack.size() - 1; i >= 0; i--) {
 			VisualCard card;
 			ICard stackCard = stack.get(i);
 			if(stackCard.isTurnedFaceUp()){
-				card = new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + 30 * i );
+				card = new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + distance * i );
 				
 			}else{
-				card = new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + 30 * i );
+				card = new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + distance * i );
 				
 			}
 			
@@ -37,15 +39,30 @@ public class VisualCardStack extends VisualAbstractDeck {
 				//add event handler - select card to move
 				card.addMouseListener(new MouseAdapter()  
 				{  
-				    public void mouseClicked(MouseEvent e)  
+				    public void mouseReleased(MouseEvent e)  
 				    {  
 						if(board.isMoveSourceSelected()){
-							ICardDeck source = board.getSelectedMoveSource();
-							
-							ICommand command = new CommandMove(source, stack);
-							board.getCommandBuilder().execute(command);
-							
-							board.setSelectedMoveSource(null);
+							if(board.getMultiMoveCard() == null){
+								//move one card 
+								ICardDeck source = board.getSelectedMoveSource();
+								
+								ICommand command = new CommandMove(source, stack);
+								board.getCommandBuilder().execute(command);
+								
+								board.setSelectedMoveSource(null);
+								
+							}else{
+								//move many cards
+								
+								ICardStack source = (ICardStack)board.getSelectedMoveSource();
+								
+								ICommand command = new CommandMoveMulti(source, stack, board.getMultiMoveCard());
+								board.getCommandBuilder().execute(command);
+								
+								board.setSelectedMoveSource(null);								
+								board.setMultiMoveCard(null);
+							}
+
 							
 						}else{
 					    	board.setSelectedMoveSource(stack);							
@@ -53,6 +70,23 @@ public class VisualCardStack extends VisualAbstractDeck {
 				    }  
 				}); 
 			
+			}else{
+				//for all turned up cards (except the last one)
+				//
+				if(stackCard.isTurnedFaceUp())
+					card.addMouseListener(new MouseAdapter()  
+					{  
+					    public void mouseReleased(MouseEvent e)  
+					    {  
+
+					    	board.setSelectedMoveSource(stack);
+						    board.setMultiMoveCard(stackCard);	
+						    			    	
+					    }  
+					}); 				
+				
+				
+				
 			}
 
 		}

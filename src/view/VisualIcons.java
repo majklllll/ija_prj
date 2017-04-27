@@ -9,23 +9,22 @@ import java.awt.Image;
 public class VisualIcons {
 	static VisualIcons me = null;
 	
-	private ImageIcon back;
-	private ImageIcon nothing;
-	private ImageIcon arrows;
-	
 	private final int CARDS = 13;
 	
 	private ArrayList<ImageIcon> cards = new ArrayList<ImageIcon>();
 	private ArrayList<ImageIcon> miniCards = new ArrayList<ImageIcon>();
-
 	
+	boolean useMiniatures = false;
+
 	VisualIcons() {
-		this.back = new ImageIcon(this.getClass().getResource("/src/resources/back.png"));
-		this.nothing = new ImageIcon(this.getClass().getResource("/src/resources/nothing.png"));
-		this.arrows = new ImageIcon(this.getClass().getResource("/src/resources/arrows.png"));
+		
+		ImageIcon back = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/back.png"))
+				.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+		ImageIcon backMini = new ImageIcon(back.getImage().getScaledInstance(75, 100, Image.SCALE_DEFAULT));
+		
 		
 		cards.add(back);
-		
+		miniCards.add(backMini);
 		
 		//add card images
 		for(int i = 1; i <= CARDS; i++) {
@@ -40,6 +39,7 @@ public class VisualIcons {
 			
 			cards.add(imageIcon);
 			miniCards.add(imageIconMini);
+			
 		}
 		for(int i = 1; i <= CARDS; i++) {
 			ImageIcon imageIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/cards/d_" + i + ".png"))
@@ -52,6 +52,7 @@ public class VisualIcons {
 			
 			cards.add(imageIcon);
 			miniCards.add(imageIconMini);
+			
 		}
 		for(int i = 1; i <= CARDS; i++) {
 			ImageIcon imageIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/cards/h_" + i + ".png"))
@@ -64,6 +65,7 @@ public class VisualIcons {
 			
 			cards.add(imageIcon);
 			miniCards.add(imageIconMini);
+			
 		}
 		for(int i = 1; i <= CARDS; i++) {
 			ImageIcon imageIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/cards/s_" + i + ".png"))
@@ -76,9 +78,23 @@ public class VisualIcons {
 			
 			cards.add(imageIcon);
 			miniCards.add(imageIconMini);
+			
 		}
 		
-
+		ImageIcon nothing = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/nothing.png"))
+				.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+		ImageIcon nothingMini = new ImageIcon(nothing.getImage().getScaledInstance(75, 100, Image.SCALE_DEFAULT));
+		
+		ImageIcon arrows = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/arrows.png"))
+				.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+		ImageIcon arrowsMini = new ImageIcon(arrows.getImage().getScaledInstance(75, 100, Image.SCALE_DEFAULT));
+		
+		cards.add(nothing);
+		cards.add(arrows);
+		
+		miniCards.add(nothingMini);
+		miniCards.add(arrowsMini);
+		
 		
 	}
 	
@@ -90,27 +106,41 @@ public class VisualIcons {
 	}
 	
 	public ImageIcon getCardIcon(VisualCard.VisualCardColor type, int value) {
+		ArrayList<ImageIcon> cardSource;
+		if(this.useMiniatures){
+			cardSource = miniCards;
+		}else{
+			cardSource = cards;
+		}
 		
 		switch(type) {
 			case CLUBS:
-				return cards.get(value);
+				return cardSource.get(value);
 			case DIAMONDS:
-				return cards.get(CARDS + value);
+				return cardSource.get(CARDS + value);
 			case HEARTS:
-				return cards.get(2 * CARDS + value);
+				return cardSource.get(2 * CARDS + value);
 			case SPADES:
-				return cards.get(3 * CARDS + value);
+				return cardSource.get(3 * CARDS + value);
 			case NONE:
-				return nothing;
+				return cardSource.get(4 * CARDS + 1);
 			case ARROWS:
-				return arrows;
+				return cardSource.get(4 * CARDS + 2);
 			case BACK:
-				return back;
+				return cardSource.get(0);
 			default:
-				return back;
+				return cardSource.get(0);
 		
 		}
 		
+		
 	}
 	
+	public void setUsingMiniatures(boolean value){
+		this.useMiniatures = value;		
+	}
+	
+	public boolean areIconsMinified(){
+		return this.useMiniatures;	
+	}	
 }

@@ -1,0 +1,7 @@
+Známé bugy
+
+otočení balíčku ve špatném pořadí
+detekce konce hry
+load hry
+pozadí nothing s expected kartou uz nastavenou
+prázdný stack není zobrazen

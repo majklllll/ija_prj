@@ -36,7 +36,7 @@ public class VisualCardDeck extends VisualAbstractDeck  {
 			
 		cardVis.addMouseListener(new MouseAdapter()  
 		{  
-		    public void mouseClicked(MouseEvent e)  
+		    public void mouseReleased(MouseEvent e)  
 		    {  
 				if(board.isMoveSourceSelected()){
 					ICardDeck source = board.getSelectedMoveSource();

@@ -24,28 +24,25 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	private IGameBoard boardModel;
 	private CommandBuilder commander;
 	
-	int panelPosX = 0, panelPosY = 0; 
-	int panelWidth = 1280, panelHeight = 700;	
-	
-	VisualCardPack picker;
+	private VisualCardPack picker;
 
-	
-	ArrayList<VisualCardDeck> decks = new ArrayList<VisualCardDeck>();
-	ArrayList<VisualCardStack> stacks = new ArrayList<VisualCardStack>();
-	
+	private ArrayList<VisualCardDeck> decks = new ArrayList<VisualCardDeck>();
+	private ArrayList<VisualCardStack> stacks = new ArrayList<VisualCardStack>();
 	
 	private ICardDeck selectedSource;
-	
+	private ICard selectedMultiMoveCard;
 	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
-		this.setBorder(new EmptyBorder(5, 5, 5, 5));
+		//this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		boardModel = bModel;
 		
 		
         commander = new CommandBuilder(bModel);
         bModel.registerObserver((ISupportRepaint)this);
         this.paintAll();
+        
+        
 		
 	}
 	
@@ -53,35 +50,39 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 
 		
 		//initialize cards
+		int basicValue = this.getHeight();
 		
-		int cardSpace = panelWidth / 8;
+		System.out.println(basicValue / 20);
 		
 		
+		int cardSpace = (int)(basicValue / 4.4);
+		
+		//add card picker and repository pack
 		VisualCardPack packPicker = new VisualCardPack();
 		packPicker.setModel(boardModel.getRepository());
-		packPicker.setXY(cardSpace * (1), (panelHeight / 10)  );
+		packPicker.setXY(cardSpace * (1), /*(basicValue / 20)*/ 35  );
 		packPicker.setPanel(this);
 		packPicker.paint();
 		picker = packPicker;	
 	
 		
-		
+		//add stack
 		for(int i = 0; i < 7; i++) {
 			VisualCardStack stack = new VisualCardStack();
 			stack.setModel(boardModel.getStack(i));
-			stack.setXY(cardSpace * (i+1), (panelHeight / 2 - 60)  );
+			stack.setXY(cardSpace * (i+1), (int)(basicValue / 2.4 )  );
 			stack.setPanel(this);
 			stack.paint();
 			stacks.add(stack);
 			
 		}
 
-		
+		//add 4 decks for used cards
 		for(int i = 0; i < 4; i++) {
 			
 			VisualCardDeck deck = new VisualCardDeck();
 			deck.setModel(boardModel.getDeck(i));
-			deck.setXY(cardSpace * (i+4), (panelHeight / 10)  );
+			deck.setXY(cardSpace * (i+4), /*(basicValue / 20)*/ 35  );
 			deck.setPanel(this);
 			deck.paint();
 			decks.add(deck);
@@ -89,35 +90,23 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		
 		//initialize buttons
 		JButton btnUndo = new JButton("Undo");
-		btnUndo.setBounds(0, 5, 100, 40);
+		btnUndo.setBounds(0, 5, 100, 25);
 		this.add(btnUndo);
 		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(150, 5, 100, 40);
+		btnSave.setBounds(150, 5, 100, 25);
 		this.add(btnSave);
 		
 		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(300, 5, 100, 40);
+		btnLoad.setBounds(300, 5, 100, 25);
 		this.add(btnLoad);		
 		
 		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(450, 5, 100, 40);
+		btnClose.setBounds(450, 5, 100, 25);
 		this.add(btnClose);		
 		
 
-		/*
-		 * 
-		 *  //add event handler - turn pack
-			card.addMouseListener(new MouseAdapter()  
-			{  
-			    public void mouseClicked(MouseEvent e)  
-			    {  
-			    	ICommand command = new CommandRenew(pack);
-			    	board.getCommandBuilder().execute(command);
-			    }  
-			}); 
-		 */
-		
+	
 		
 		//add event handlers
 		btnUndo.addActionListener(new ActionListener() {
@@ -152,28 +141,18 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        //your actions
+		    	closeThisBoard();
 		    }
 		});
-		
-		
-		/*JButton btnNewGame = new JButton("New game");
-		btnNewGame.setBounds(800, 5, 100, 50);
-		this.add(btnNewGame);
-		
-		//add event handlers
-		btnNewGame.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        //your actions
-		    }
-		});*/
-		
 		
 
 	}
 	
 	public void repaint() {
-		System.out.println("zadost o repaint");
+		removeListeners();	
+		
+		
+		//System.out.println("Prekresleni boardu ");
 		this.removeAll();
 		if(this.boardModel != null)
 			this.paintAll();
@@ -184,6 +163,25 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	}
 	
 	
+	public void removeListeners(){	
+		Component[] components = this.getComponents();
+		for(Component component: components){
+			
+			//System.out.println(
+			MouseListener[] listeners = component.getMouseListeners();
+			for(MouseListener listener : listeners){
+				this.removeMouseListener(listener);
+				
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	
+	
 	public CommandBuilder getCommandBuilder(){
 		return commander;
 		
@@ -191,30 +189,32 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	
 	public void setSelectedMoveSource(ICardDeck deck){
 		this.selectedSource = deck;		
+			
 	}
 	public ICardDeck getSelectedMoveSource(){
 		return this.selectedSource;		
 	}
+	
 	public boolean isMoveSourceSelected() {
 		return (this.selectedSource != null);				
 	}
 	
 	
-	/*public void paintCardRepo() {
-		
-		
+	
+	public ICard getMultiMoveCard(){
+		return this.selectedMultiMoveCard;		
 	}
-	public void paintCardRepoSec() {
-		
-		
+	
+	public void setMultiMoveCard(ICard card) {
+		this.selectedMultiMoveCard = card;				
 	}
-	public void paintStack(int stackNumber) {
-		
-		
+	
+	public void closeThisBoard(){
+
+		MainView window = (MainView)this.getTopLevelAncestor();
+		window.removeBoard(this);
+
 	}
-	public void paintDeck(int deckNumber) {
-		
-		
-	}	*/
+	
 	
 }

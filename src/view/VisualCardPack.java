@@ -14,14 +14,6 @@ public class VisualCardPack extends VisualAbstractDeck {
 	
 			
 	public void paint() {
-		/*System.out.println(cardPicker);
-		
-		if(cardPicker != null)
-			board.remove(cardPicker);
-		
-		if(cardDefer != null)
-			board.remove(cardDefer);*/
-		
 		
 		if(pack.isAnyHidden()) {
 			//hidden cards - cardback
@@ -33,7 +25,7 @@ public class VisualCardPack extends VisualAbstractDeck {
 			//add event handler - next card
 			card.addMouseListener(new MouseAdapter()  
 			{  
-			    public void mouseClicked(MouseEvent e)  
+			    public void mouseReleased(MouseEvent e)  
 			    {  
 			    	//show next card
 			    	ICommand command = new CommandNext(pack);
@@ -51,7 +43,7 @@ public class VisualCardPack extends VisualAbstractDeck {
 			//add event handler - turn pack
 			card.addMouseListener(new MouseAdapter()  
 			{  
-			    public void mouseClicked(MouseEvent e)  
+			    public void mouseReleased(MouseEvent e)  
 			    {  
 			    	ICommand command = new CommandRenew(pack);
 			    	board.getCommandBuilder().execute(command);
@@ -71,9 +63,12 @@ public class VisualCardPack extends VisualAbstractDeck {
 			//add event handler - select card to move
 			card.addMouseListener(new MouseAdapter()  
 			{  
-			    public void mouseClicked(MouseEvent e)  
+			    public void mouseReleased(MouseEvent e)  
 			    {  
 			    	board.setSelectedMoveSource(pack);
+			    	//VisualCard origin = (VisualCard) e.getSource();
+			    	//origin.setSelected();
+			    	//board.repaint();
 			    }  
 			}); 
 			
