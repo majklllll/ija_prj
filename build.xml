@@ -15,10 +15,13 @@
     </target>
 
     <target name="compile" depends="clean,compilesrc">
+	<copy todir="${build}/src/resources">
+    	    <fileset dir="${src}/resources"/>
+  	</copy>
         <mkdir dir="${dist}"/>
         <jar destfile="${dist}/ija-client.jar" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="src.view.MainVieW"/>
+                <attribute name="Main-Class" value="src.view.MainView"/>
                 <!--<attribute name="Class-Path" value="lib/hamcrest-core-1.3.jar:lib/junit-4.12.jar"/>-->
             </manifest>
         </jar>
@@ -26,8 +29,6 @@
         <copy file="${lib}/hamcrest-core-1.3.jar" todir="${dist}/lib"/>
         <copy file="${lib}/junit-4.12.jar" todir="${dist}/lib"/>
     </target>
-
-
     
     <target name="run">
         <!--<junit haltonfailure="true" printsummary="true" >
