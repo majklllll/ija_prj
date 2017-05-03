@@ -207,7 +207,7 @@ public class BoardModel implements IGameBoard{
 
     public boolean checkGameOver(){
         for(ICardDeck deck : this.decks)
-            if(deck.top().value() != ICard.ValueConvertor.King)
+            if(!deck.isEmpty() && deck.top().value() != ICard.ValueConvertor.King)
                 return false;
         return true;
     }
