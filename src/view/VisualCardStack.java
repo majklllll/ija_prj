@@ -23,13 +23,11 @@ public class VisualCardStack extends VisualAbstractDeck {
 			VisualCard card;
 			ICard stackCard = stack.get(i);
 			if(stackCard.isTurnedFaceUp()){
-				card = new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + distance * i );
-				
-			}else{
-				card = new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + distance * i );
-				
+				card = new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + distance * i );	
 			}
-			
+			else{
+				card = new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + distance * i );
+			}
 			board.add(card);
 			
 			// Card selected - move to stack
@@ -60,9 +58,15 @@ public class VisualCardStack extends VisualAbstractDeck {
 							// Execute command xor set this as a source.
 							if(command.canExecute())
 								 board.getCommandBuilder().execute(command);
-							else board.setSelectedMoveSource(stack);
+							else{
+								board.setSelectedMoveSource(stack);
+								card.setSelected(); // <------- CHECK
+							}
 						}
-						else board.setSelectedMoveSource(stack);										    	
+						else{
+							board.setSelectedMoveSource(stack);
+							card.setSelected(); // <------- CHECK
+						}									    	
 				    }  
 				}); 
 			
@@ -75,7 +79,8 @@ public class VisualCardStack extends VisualAbstractDeck {
 					    public void mouseReleased(MouseEvent e)  
 					    {  
 					    	board.setSelectedMoveSource(stack);
-						    board.setMultiMoveCard(stackCard);	 			    	
+						    board.setMultiMoveCard(stackCard);
+							card.setSelected(); 	// <------- CHECK    	
 					    }  
 					}); 				
 			}
