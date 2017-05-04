@@ -20,6 +20,7 @@
     	    <fileset dir="${src}/resources"/>
   	</copy>
         <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/saves"/>
         <jar destfile="${dist}/ija-client.jar" basedir="${build}">
             <manifest>
                 <attribute name="Main-Class" value="src.view.MainView"/>
