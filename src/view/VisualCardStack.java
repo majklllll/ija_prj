@@ -32,69 +32,56 @@ public class VisualCardStack extends VisualAbstractDeck {
 			
 			board.add(card);
 			
-			//card selected - move to stack
-			//no card selected yet - move from stack
+			// Card selected - move to stack
+			// No card selected yet - move from stack
 			if(i == stack.size() - 1 ) {
-				//for last card only
-				//add event handler - select card to move
+				// For last card only
+				// Add event handler - select card to move
 				card.addMouseListener(new MouseAdapter()  
 				{  
 				    public void mouseReleased(MouseEvent e)  
 				    {  
 						if(board.isMoveSourceSelected()){
+							ICommand command = null;
 							if(board.getMultiMoveCard() == null){
-								//move one card 
+								// Move one card.
 								ICardDeck source = board.getSelectedMoveSource();
-								
-								ICommand command = new CommandMove(source, stack);
-								board.getCommandBuilder().execute(command);
-								
+								command = new CommandMove(source, stack);
 								board.setSelectedMoveSource(null);
-								
-							}else{
-								//move many cards
-								
+							}
+							else{
+								// Move many cards.	
 								ICardStack source = (ICardStack)board.getSelectedMoveSource();
-								
-								ICommand command = new CommandMoveMulti(source, stack, board.getMultiMoveCard());
-								board.getCommandBuilder().execute(command);
-								
+								command = new CommandMoveMulti(source, stack, board.getMultiMoveCard());
 								board.setSelectedMoveSource(null);								
 								board.setMultiMoveCard(null);
 							}
 
-							
-						}else{
-					    	board.setSelectedMoveSource(stack);							
-						}				    	
+							// Execute command xor set this as a source.
+							if(command.canExecute())
+								 board.getCommandBuilder().execute(command);
+							else board.setSelectedMoveSource(stack);
+						}
+						else board.setSelectedMoveSource(stack);										    	
 				    }  
 				}); 
 			
-			}else{
-				//for all turned up cards (except the last one)
-				//
+			}
+			else{
+				// For all turned up cards (except the last one)
 				if(stackCard.isTurnedFaceUp())
 					card.addMouseListener(new MouseAdapter()  
 					{  
 					    public void mouseReleased(MouseEvent e)  
 					    {  
-
 					    	board.setSelectedMoveSource(stack);
-						    board.setMultiMoveCard(stackCard);	
-						    			    	
+						    board.setMultiMoveCard(stackCard);	 			    	
 					    }  
 					}); 				
-				
-				
-				
 			}
-
 		}
-
-
-		
-		
 	}
+
 	public void setModel(ICardStack stackModel) {
 		stack = stackModel;		
 	}
