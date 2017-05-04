@@ -45,25 +45,6 @@ public class CardModel extends Object implements ICard{
         this.isTurnedUp = false;
     }
 
-    public CardModel(String decoded){
-        /*String message = "String '" + decoded + "' does not represent card.";
-        if(decoded.length() != 0)
-            throw new IllegalArgumentException(message);
-
-        int colorValue = 0;
-        int turnValue = 0;
-        try{
-            this.value = Integer.parseInt(Character.toString(decoded.charAt(0)), 14);
-            this.colorValue = Integer.parseInt(Character.toString(decoded.charAt(0)), 5);
-            this.turnValue = Integer.parseInt(Character.toString(decoded.charAt(0)), 2);
-        }
-        catch(NumberFormatException e){
-            throw new IllegalArgumentException(message);
-        }
-        this.color = ICard.Color(ICard.Color.toHashList()[colorValue]);
-        this.isTurnedUp = turnValue == 1;*/
-    }
-
     // Compare 2 objects, cards has to be of same color and value to mark them as a equals.
     @Override
     public boolean equals(Object other){
@@ -97,11 +78,11 @@ public class CardModel extends Object implements ICard{
     }
 
     public boolean similarColorTo(ICard card){
-        return this.color.similarColorTo(card.color());
+        return card == null ? false : this.color.similarColorTo(card.color());
     }
 
     public int compareValue(ICard card){
-        return this.value - card.value();
+        return card == null ? Integer.MAX_VALUE : this.value - card.value();
     }
 
     public boolean isTurnedFaceUp(){
