@@ -18,6 +18,9 @@ import src.share.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FilenameFilter;
+
 import javax.swing.JOptionPane;
 
 public class VisualBoard extends JPanel implements ISupportRepaint {
@@ -48,6 +51,24 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	
 	public void paintAll() {
 
+		
+		//initialize buttons
+		JButton btnUndo = new JButton("Undo");
+		btnUndo.setBounds(0, 5, 100, 25);
+		this.add(btnUndo);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.setBounds(150, 5, 100, 25);
+		this.add(btnSave);
+		
+		JButton btnLoad= new JButton("Load");
+		btnLoad.setBounds(300, 5, 100, 25);
+		this.add(btnLoad);		
+		
+		JButton btnClose= new JButton("Close");
+		btnClose.setBounds(450, 5, 100, 25);
+		this.add(btnClose);	
+		
 		
 		//initialize cards
 		int basicValue = this.getHeight();
@@ -88,22 +109,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			decks.add(deck);
 		}
 		
-		//initialize buttons
-		JButton btnUndo = new JButton("Undo");
-		btnUndo.setBounds(0, 5, 100, 25);
-		this.add(btnUndo);
-		
-		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(150, 5, 100, 25);
-		this.add(btnSave);
-		
-		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(300, 5, 100, 25);
-		this.add(btnLoad);		
-		
-		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(450, 5, 100, 25);
-		this.add(btnClose);		
+	
 		
 
 	
@@ -133,7 +139,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		btnLoad.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        //your actions
+		        loadFile();
 		    }
 		});
 		//add event handlers
@@ -147,6 +153,22 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		
 
 	}
+	public void paintGameOver(){
+		
+		JButton btnClose= new JButton("Game Over - You have won");
+		btnClose.setBounds(250, 30, 200, 80);
+		this.add(btnClose);	
+		
+		//add event handlers
+		btnClose.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        //your actions
+		    	closeThisBoard();
+		    }
+		});
+	}
+	
 	
 	public void repaint() {
 		removeListeners();	
@@ -154,9 +176,17 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		
 		//System.out.println("Prekresleni boardu ");
 		this.removeAll();
-		if(this.boardModel != null)
-			this.paintAll();
 		
+		//check if game is over
+		if(this.boardModel != null){
+			if(this.boardModel.isGameOver()){
+				paintGameOver();
+			}else{
+				//repaint board
+				this.paintAll();
+			}
+		}
+		//repaint GUI
 		super.repaint();
 		this.revalidate();
 		
@@ -214,6 +244,48 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		MainView window = (MainView)this.getTopLevelAncestor();
 		window.removeBoard(this);
 
+	}
+	
+	public void loadFile(){
+		//load list of files in directory "saved"
+		final String LOAD_DIR = "saved";
+		ArrayList<String> filesString = new ArrayList<String>();
+
+		File[] listOfFiles = new File(LOAD_DIR).listFiles(new FilenameFilter() { 
+	            public boolean accept(File dir, String filename)
+	            {
+	            	return filename.endsWith(".board"); 
+	            }
+			} );
+		//If this pathname does not denote a directory, then listFiles() returns null. 
+
+		for (File file : listOfFiles) {
+		    if (file.isFile()) {
+		        filesString.add(file.getName().replaceAll("\\.board$", ""));
+		    }
+		}		
+		
+		//convert arraylist to array
+		Object[] fileNamesArray = filesString.toArray(new Object[filesString.size()]);
+		
+		String fileToLoad = (String)JOptionPane.showInputDialog(
+		                    this,
+		                    "Select file to load,\n" +
+		                    "Here are your choices:",
+		                    "Load dialog",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    fileNamesArray,
+		                    "loadDialog");
+
+		//If a string was returned, execute load command
+		if ((fileToLoad != null) && (fileToLoad.length() > 0)) {
+			//try to load file
+			ICommand command = new ControlCommand("load", new ArrayList<String>(){{add(LOAD_DIR + "/" + fileToLoad);}});
+			this.getCommandBuilder().execute(command);
+		}
+		//System.out.println(possibilities);
+		
 	}
 	
 	
