@@ -33,6 +33,8 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
 
     @Override
     protected boolean canPutCard(ICard card){
+        if(card == null)
+            return false;
         if(this.isEmpty())
             return card.value() == ICard.ValueConvertor.King;
         return !this.top().similarColorTo(card) && card.value() == this.top().value() - 1;
