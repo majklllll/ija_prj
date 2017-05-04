@@ -38,6 +38,8 @@ public class CardDeckModel extends AbstractCardDeck{
 
     @Override
     protected boolean canPutCard(ICard card){
+        if(card == null)
+            return false;
         if(this.isEmpty())
             return card.value() == ICard.ValueConvertor.Ace && card.color() == expectedColor;
         return this.top().value() + 1 == card.value() && this.top().color() == card.color();
