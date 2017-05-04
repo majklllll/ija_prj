@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import src.model.BoardModel;
 import src.controler.CommandBuilder;
@@ -18,7 +19,8 @@ import src.share.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.JOptionPane;
+import java.io.File;
+import java.io.FilenameFilter;
 
 public class VisualBoard extends JPanel implements ISupportRepaint {
 	private IGameBoard boardModel;
@@ -35,59 +37,13 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
 		//this.setBorder(new EmptyBorder(5, 5, 5, 5));
-		boardModel = bModel;
-		
-		
+		boardModel = bModel;	
         commander = new CommandBuilder(bModel);
         bModel.registerObserver((ISupportRepaint)this);
         this.paintAll();
-        
-        
-		
 	}
 	
 	public void paintAll() {
-
-		
-		//initialize cards
-		int basicValue = this.getHeight();
-		
-		System.out.println(basicValue / 20);
-		
-		
-		int cardSpace = (int)(basicValue / 4.4);
-		
-		//add card picker and repository pack
-		VisualCardPack packPicker = new VisualCardPack();
-		packPicker.setModel(boardModel.getRepository());
-		packPicker.setXY(cardSpace * (1), /*(basicValue / 20)*/ 35  );
-		packPicker.setPanel(this);
-		packPicker.paint();
-		picker = packPicker;	
-	
-		
-		//add stack
-		for(int i = 0; i < 7; i++) {
-			VisualCardStack stack = new VisualCardStack();
-			stack.setModel(boardModel.getStack(i));
-			stack.setXY(cardSpace * (i+1), (int)(basicValue / 2.4 )  );
-			stack.setPanel(this);
-			stack.paint();
-			stacks.add(stack);
-			
-		}
-
-		//add 4 decks for used cards
-		for(int i = 0; i < 4; i++) {
-			
-			VisualCardDeck deck = new VisualCardDeck();
-			deck.setModel(boardModel.getDeck(i));
-			deck.setXY(cardSpace * (i+4), /*(basicValue / 20)*/ 35  );
-			deck.setPanel(this);
-			deck.paint();
-			decks.add(deck);
-		}
-		
 		//initialize buttons
 		JButton btnUndo = new JButton("Undo");
 		btnUndo.setBounds(0, 5, 100, 25);
@@ -105,8 +61,37 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		btnClose.setBounds(450, 5, 100, 25);
 		this.add(btnClose);		
 		
+		//initialize cards
+		int basicValue = this.getHeight();
+		int cardSpace = (int)(basicValue / 4.4);
+		
+		//add card picker and repository pack
+		VisualCardPack packPicker = new VisualCardPack();
+		packPicker.setModel(boardModel.getRepository());
+		packPicker.setXY(cardSpace * (1), /*(basicValue / 20)*/ 35  );
+		packPicker.setPanel(this);
+		packPicker.paint();
+		picker = packPicker;	
+		
+		//add stack
+		for(int i = 0; i < 7; i++) {
+			VisualCardStack stack = new VisualCardStack();
+			stack.setModel(boardModel.getStack(i));
+			stack.setXY(cardSpace * (i+1), (int)(basicValue / 2.4 )  );
+			stack.setPanel(this);
+			stack.paint();
+			stacks.add(stack);
+		}
 
-	
+		//add 4 decks for used cards
+		for(int i = 0; i < 4; i++) {	
+			VisualCardDeck deck = new VisualCardDeck();
+			deck.setModel(boardModel.getDeck(i));
+			deck.setXY(cardSpace * (i+4), /*(basicValue / 20)*/ 35  );
+			deck.setPanel(this);
+			deck.paint();
+			decks.add(deck);
+		}
 		
 		//add event handlers
 		btnUndo.addActionListener(new ActionListener() {
@@ -116,52 +101,70 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		    	getCommandBuilder().execute(command);
 		    }
 		});
+
 		//add event handlers
 		btnSave.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
+				final String SAVE_DIRECTORY = "saves";
 		        String fileName = JOptionPane.showInputDialog(null, "Enter file name:", "Dialog for file name", JOptionPane.WARNING_MESSAGE);
-		        if(fileName.length() > 0){
-		        	ICommand command = new ControlCommand("save", new ArrayList<String>(){{add(fileName);}});
+		        if(fileName != null && fileName.length() > 0){
+		        	ICommand command = new ControlCommand("save", new ArrayList<String>(){{add(SAVE_DIRECTORY +  "/" + fileName);}});
 		        	getCommandBuilder().execute(command);
 		        }
-		    	
-		    	
 		    }
 		});
+
 		//add event handlers
 		btnLoad.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        //your actions
+		        loadFile();
 		    }
 		});
+
 		//add event handlers
 		btnClose.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        //your actions
 		    	closeThisBoard();
 		    }
 		});
 		
 
 	}
+	public void paintGameOver(){
+		JButton btnClose= new JButton("Game Over - You have won");
+		btnClose.setBounds(250, 30, 200, 80);
+		this.add(btnClose);	
+		
+		//add event handlers
+		btnClose.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	closeThisBoard();
+		    }
+		});
+	}	
 	
 	public void repaint() {
-		removeListeners();	
-		
-		
-		//System.out.println("Prekresleni boardu ");
+		removeListeners();		
 		this.removeAll();
-		if(this.boardModel != null)
-			this.paintAll();
 		
+		// Check if game is over
+		if(this.boardModel != null){
+			if(this.boardModel.isGameOver()){
+				paintGameOver();
+			}else{
+				// Repaint board
+				this.paintAll();
+			}
+		}
+
+		// Repaint GUI
 		super.repaint();
 		this.revalidate();
-		
 	}
-	
 	
 	public void removeListeners(){	
 		Component[] components = this.getComponents();
@@ -172,19 +175,12 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			for(MouseListener listener : listeners){
 				this.removeMouseListener(listener);
 				
-			}
-			
+			}	
 		}
-		
-		
 	}
 	
-	
-	
-	
 	public CommandBuilder getCommandBuilder(){
-		return commander;
-		
+		return commander;	
 	}
 	
 	public void setSelectedMoveSource(ICardDeck deck){
@@ -199,8 +195,6 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		return (this.selectedSource != null);				
 	}
 	
-	
-	
 	public ICard getMultiMoveCard(){
 		return this.selectedMultiMoveCard;		
 	}
@@ -210,11 +204,50 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	}
 	
 	public void closeThisBoard(){
-
 		MainView window = (MainView)this.getTopLevelAncestor();
 		window.removeBoard(this);
-
 	}
 	
-	
+	public void loadFile(){
+		//load list of files in directory "saved"
+		final String LOAD_DIR = "saves";
+		ArrayList<String> filesString = new ArrayList<String>();
+		File[] listOfFiles = new File(LOAD_DIR).listFiles(new FilenameFilter() { 
+	            public boolean accept(File dir, String filename)
+	            {
+	            	return filename.endsWith(".board"); 
+	            }
+			} );
+		// If this pathname does not denote a directory, then listFiles() returns null.
+
+		// Inform user when there is not any saved game.
+		if(listOfFiles.length <= 0){
+			JOptionPane.showMessageDialog(null, "No saved game found.", "There are no saved games.", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+
+		for (File file : listOfFiles) {
+		    if (file.isFile()) {
+		        filesString.add(file.getName().replaceAll("\\.board$", ""));
+		    }
+		}		
+		
+		// Convert arraylist to array
+		Object[] fileNamesArray = filesString.toArray(new Object[filesString.size()]);
+		String fileToLoad = (String)JOptionPane.showInputDialog(
+		                    this,
+		                    "Select file to load,\n" +
+		                    "Here are your choices:",
+		                    "Load dialog",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    fileNamesArray,
+		                    "loadDialog");
+
+		// If a string was returned, execute load command
+		if (fileToLoad != null && fileToLoad.length() > 0) {
+			ICommand command = new ControlCommand("load", new ArrayList<String>(){{add(LOAD_DIR + "/" + fileToLoad);}});
+			this.getCommandBuilder().execute(command);
+		}		
+	}
 }
