@@ -7,14 +7,13 @@ public abstract class VisualAbstractDeck {
 	protected int x,y;
 	protected VisualBoard board;
 			
-	public void paint() {
-		
-	}
+	public abstract void paint();
 
 	public void setXY(int newX, int newY) {
 		x = newX;
 		y = newY;
 	}
+	
 	public void setPanel(VisualBoard newBoard) {
 		board = newBoard;
 	}
