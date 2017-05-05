@@ -1,7 +1,7 @@
 
 /**
   * File:       RelayCommand.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -17,7 +17,9 @@ package src.controler;
 import java.util.ArrayList;
 
 
-
+/**
+ * Command containing full name and arguments of method to be called usign reflection.
+ */
 public class ControlCommand implements ICommand{
     private String callable = null;
     private ArrayList<String> arguments = null;
@@ -39,18 +41,34 @@ public class ControlCommand implements ICommand{
         return true;
     }
 
+    /**
+     * Get callable/method to be called while command exection.
+     * @return string containng callable method.
+     */
     public String getCallable(){
         return this.callable;
     }
 
+    /**
+     * Get argumetns of called method.
+     * @return list of method arguments.
+     */
     public ArrayList<String> getArguments(){
         return this.arguments;
     }
 
+    /**
+     * Get count of method arguments.
+     * @return count of method arguments.
+     */
     public int argumentCount(){
         return this.arguments != null ? this.arguments.size() : 0;
     }
 
+    /**
+     * Check if method related with control command has any argument.
+     * @return true when method related with command has at least one argumetn. 
+     */
     public boolean hasArguments(){
         return this.argumentCount() > 0;
     }

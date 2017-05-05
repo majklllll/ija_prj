@@ -1,7 +1,7 @@
 
 /**
   * File:       ICommand.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -17,11 +17,24 @@ package src.controler;
 // Depenencies
 import java.io.Serializable;
 
+/**
+ * Interface for command design pattern.
+ */
 public interface ICommand extends Serializable{
 
+    /** 
+     * Perform action specified by command. 
+     * */
     public void execute();
 
+    /** 
+     * Undo changes caused by application of command. 
+     * */
     public void unexecute();
 
+    /**
+     * Check wheever can be command executed.
+     * @return true when its possible to execute command.
+     */
     public boolean canExecute();
 }

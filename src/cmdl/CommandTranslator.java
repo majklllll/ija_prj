@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandTranslator.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -25,6 +25,9 @@ import src.controler.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+/**
+ * Translate commands from text to ICommand instance. 
+ */
 public class CommandTranslator{
     IGameBoard model = null;
     public static final char deckTypeCharacter = 'd';
@@ -36,6 +39,11 @@ public class CommandTranslator{
         this.model = model;
     }
 
+    /**
+     * Translate given command from text form to ICommand instance.
+     * @param command string representation of action to be performed.
+     * @return command representing action prepared for exection.
+     */
     public ICommand translate(String command) throws IllegalArgumentException{
         ArrayList<String> parsedCommand = new ArrayList<String>(Arrays.asList(command.split("\\s+")));
         if(parsedCommand.size() <= 0)
@@ -160,6 +168,9 @@ public class CommandTranslator{
             throw new IllegalArgumentException("Invalid argument count of command. Expecting " + expected + ".");
     }
 
+    /**
+     * Print help related to command line version of Klondike Solitaire.
+     */
     private void printHelp(){
         System.out.println("Available commands:");
         System.out.println("\tmove SOURCE DESTINATION");

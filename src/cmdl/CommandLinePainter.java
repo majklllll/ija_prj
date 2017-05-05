@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandLinePainter.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -26,6 +26,9 @@ import src.share.ICard;
 import src.share.ISupportRepaint;
 import java.util.ArrayList;
 
+/**
+ * Printer drawing game into console.
+ */
 public class CommandLinePainter implements ISupportRepaint{
     private IGameBoard model = null;
     private ICard dummyHiddenCard = new CardModel(ICard.Color.DIAMONDS, 5); 
@@ -43,6 +46,9 @@ public class CommandLinePainter implements ISupportRepaint{
         this.model = model;
     }
 
+    /**
+     * Paint current state of game to command line.
+     */
     public void repaint(){
         // Check if game is finnished.
         if(this.model.isGameOver()){
@@ -99,10 +105,18 @@ public class CommandLinePainter implements ISupportRepaint{
             this.print(this.model.getHints());
     }
 
+    /**
+     * Print text to command line.
+     * @param text text to be printed.
+     */
     private void print(String text){
         System.out.print(text);
     }
 
+    /**
+     * Print card to command line.
+     * @param card card to be printed.
+     */
     private void print(ICard card){
         this.print(" ");
         if(!card.isTurnedFaceUp())
@@ -118,6 +132,10 @@ public class CommandLinePainter implements ISupportRepaint{
         this.print((card.value() == 10 && card.isTurnedFaceUp() ? "" : " "));
     }
 
+    /**
+     * Print hints to command line.
+     * @param hints list of hints to be printed.
+     */
     private void print(ArrayList<ICardHint> hints){
         for(ICardHint hint : hints){
             // Print card and source deck.
@@ -149,6 +167,10 @@ public class CommandLinePainter implements ISupportRepaint{
         }
     }
 
+    /**
+     * Print empty card deck to command line.
+     * @param deck to be printed.
+     */
     private void printEmptyDeck(ICard.Color color, String deckName, boolean separateWithSpace){
         if(separateWithSpace)
             this.print(" ");
@@ -164,14 +186,26 @@ public class CommandLinePainter implements ISupportRepaint{
             this.print("  ");
     }
 
+    /**
+     * Print white text of blue bakcgound
+     * @param text text to be printed.
+     */
     private void printWhiteOnBlue(String text){
         this.print(CommandLinePainter.whiteOnBlue + text + CommandLinePainter.defaultColors);
     }
 
+    /**
+     * Print red text of white bakcgound.
+     * @param text text to be printed.
+     */
     private void printRedOnWhite(String text){
         this.print(CommandLinePainter.redOnWhite + text + CommandLinePainter.defaultColors);
     }
 
+    /**
+     * Print black text of white background.
+     * @param text text to be printed.
+     */
     private void printBlackOnWhite(String text){
         this.print(CommandLinePainter.blackOnWhite + text + CommandLinePainter.defaultColors);
     }

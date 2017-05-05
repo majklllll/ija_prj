@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandLineKlondike.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -19,7 +19,10 @@ import src.controler.CommandBuilder;
 import src.controler.ICommand;
 import src.share.*;
 
-public interface CommandLineKlondike{
+/**
+ * Command line version of Klondike Solitaire.
+ */
+public class CommandLineKlondike{
 
     public static void main(String[] args){
         String command;

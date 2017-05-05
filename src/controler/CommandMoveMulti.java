@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandMoveMulti.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -19,6 +19,9 @@ import src.share.ICardDeck;
 import src.share.ICardStack;
 import src.share.ICard;
 
+/**
+ * Command to move multiple cards from any stact to another.
+ */
 public class CommandMoveMulti implements ICommand{
     ICardStack source      = null;
     ICardStack destination = null;

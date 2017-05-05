@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandMove.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -17,6 +17,9 @@ package src.controler;
 // Dependecies
 import src.share.ICardDeck;
 
+/**
+ * Command to move single card from deck to another.
+ */
 public class CommandMove implements ICommand{
     ICardDeck source      = null;
     ICardDeck destination = null;

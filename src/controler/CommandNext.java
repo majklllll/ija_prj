@@ -1,7 +1,7 @@
 
 /**
   * File:       CommandNext.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -17,6 +17,9 @@ package src.controler;
 // Dependecies
 import src.share.ICardRepository;
 
+/**
+ * Command to show next card in given repostiory.
+ */
 public class CommandNext implements ICommand{
     ICardRepository repository = null;
 
