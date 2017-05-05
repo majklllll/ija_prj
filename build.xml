@@ -16,13 +16,13 @@
     </target>
 
     <target name="compile" depends="clean,compilesrc,doc">
-	<copy todir="${build}/src/resources">
-    	    <fileset dir="${src}/resources"/>
+	<copy todir="${build}/lib/resources">
+    	    <fileset dir="${lib}/resources"/>
   	</copy>
         <mkdir dir="${dist}"/>
         <mkdir dir="${dist}/saves"/>
 	<copy todir="${dist}/resources">
-    	    <fileset dir="${src}/resources"/>
+    	    <fileset dir="${lib}/resources"/>
   	</copy>
 
         <jar destfile="${dist}/ija-client.jar" basedir="${build}">

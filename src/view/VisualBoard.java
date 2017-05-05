@@ -49,17 +49,23 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		btnUndo.setBounds(0, 5, 100, 25);
 		this.add(btnUndo);
 		
+		//initialize buttons
+		JButton btnHint = new JButton("Hints");
+		btnHint.setBounds(110, 5, 100, 25);
+		this.add(btnHint);
+		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(150, 5, 100, 25);
+		btnSave.setBounds(220, 5, 100, 25);
 		this.add(btnSave);
 		
 		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(300, 5, 100, 25);
+		btnLoad.setBounds(330, 5, 100, 25);
 		this.add(btnLoad);		
 		
 		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(450, 5, 100, 25);
-		this.add(btnClose);		
+		btnClose.setBounds(440, 5, 100, 25);
+		this.add(btnClose);	
+			
 		
 		//initialize cards
 		int basicValue = this.getHeight();
@@ -114,6 +120,18 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		        }
 		    }
 		});
+		
+		//add event handlers
+		btnHint.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	ICommand command = new ControlCommand("hint");
+		    	getCommandBuilder().execute(command);
+		    	//System.out.println(boardModel.getHints());
+		    }
+		});
+		
+		
 
 		//add event handlers
 		btnLoad.addActionListener(new ActionListener() {

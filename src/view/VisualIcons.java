@@ -18,10 +18,10 @@ public class VisualIcons {
 	boolean useMiniatures = false;
 	BufferedImage patternSelected= null;
 	BufferedImage patternHint = null;
-	final static String RESOURCES = "/src/resources";
+	final static String RESOURCES = "/lib/resources";
 
 	VisualIcons() {	
-		ImageIcon back = new ImageIcon(new ImageIcon(this.getClass().getResource("/src/resources/back.png"))
+		ImageIcon back = new ImageIcon(new ImageIcon(this.getClass().getResource(RESOURCES + "/back.png"))
 				.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT));
 		ImageIcon backMini = new ImageIcon(back.getImage().getScaledInstance(75, 100, Image.SCALE_DEFAULT));
 		cards.add(back);
