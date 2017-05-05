@@ -3,7 +3,7 @@
     <property name="src" location="src"/>
     <property name="build" location="build"/>
     <property name="lib" location="lib"/>
-	<property name="doc" location="doc"/>
+    <property name="doc" location="doc"/>
     <property name="dist" location="dest-client"/>
     
     <target name="clean">
@@ -21,6 +21,10 @@
   	</copy>
         <mkdir dir="${dist}"/>
         <mkdir dir="${dist}/saves"/>
+	<copy todir="${dist}/resources">
+    	    <fileset dir="${src}/resources"/>
+  	</copy>
+
         <jar destfile="${dist}/ija-client.jar" basedir="${build}">
             <manifest>
                 <attribute name="Main-Class" value="src.view.MainView"/>
