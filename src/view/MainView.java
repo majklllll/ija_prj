@@ -1,29 +1,26 @@
+/**
+ * This file contains class MainView
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
-//import java.awt.BorderLayout;
 import java.awt.EventQueue;
-//import java.awt.Color;
-
-//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-//import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
 import java.awt.GridLayout;
-//import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import src.view.VisualBoard;
-//import src.controler.CommandBuilder;
-//import src.controler.ICommand;
 import src.model.BoardModel;
 
-
+/**
+*   This class represents GUI window 
+*/
 public class MainView extends JFrame{
 	public static final int BOARD_LIMIT           = 4;
 	protected ArrayList<VisualBoard> boards       = new ArrayList<VisualBoard>(); 
@@ -35,6 +32,7 @@ public class MainView extends JFrame{
 	
 	/**
 	 * Launch the application.
+	 * @param  args arguments.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -55,7 +53,7 @@ public class MainView extends JFrame{
 	 */
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1280, 700);
+		setBounds(100, 100, 1280, 750);
 		getContentPane().setLayout(null);
 		
 		initLayouts();
@@ -84,7 +82,9 @@ public class MainView extends JFrame{
 		});	
 	}
 	
-	/* Create new board and add it */
+	/**
+	 * Creates new board and add it to window
+	 */
 	public void addBoard() {
 		if(boards.size() < BOARD_LIMIT) {
 			if(boards.size() == 1) {
@@ -100,7 +100,11 @@ public class MainView extends JFrame{
 			this.forceRepaint();
 		}	
 	}
-
+	
+	/**
+	 * Removes existing board from window
+	 * @param  board board.
+	 */
 	public void removeBoard(VisualBoard board) {
 		if(boards.size() == 2) {
 			//change grid to 1x1
@@ -118,21 +122,36 @@ public class MainView extends JFrame{
 		System.out.println(boards.size());
 	}
 	
+	/**
+	 * Method returns board of specific number
+	 * @param  number number of board.
+	 * @return visual board.
+	 */	
 	public VisualBoard getBoard(int number) {
 		return boards.get(number);
 		
 	}
 	
+	/**
+	 * Method force window to repaint
+	 */	
 	public void forceRepaint(){
 		this.repaint();
 		this.revalidate();	
 	}
 	
+	/**
+	 * Initializes default layouts used in whole app
+	 */	
 	private void initLayouts() {
 		layoutFull = new GridLayout(1, 1, 0, 0);
 		layout4Tiles = new GridLayout(2, 2, 0, 0);
 	}
 	
+	/**
+	 * Method changes layout of whole window
+	 * @param  layout layout to set.
+	 */	
 	public void changeLayout(GridLayout layout){
 		this.bottomPanel.setLayout(layout);
 		

@@ -1,3 +1,8 @@
+/**
+ * This file contains class VisualCardDeck
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
 import java.awt.event.MouseAdapter;
@@ -10,10 +15,17 @@ import src.controler.CommandMove;
 import src.controler.ICommand;
 import src.share.ICard;
 
+
+/**
+*   This class represents one of four card decks on board
+*/
 public class VisualCardDeck extends VisualAbstractDeck {
 	ICardDeck deck;
 	private VisualCard card;
-			
+	
+	/**
+	 * Paints this deck
+	 */			
 	public void paint() {
 		ICard stackCard = deck.top();
 		VisualCard card = this.card = stackCard != null ?
@@ -40,11 +52,19 @@ public class VisualCardDeck extends VisualAbstractDeck {
 		    }
 		}); 		
 	}
-
+	
+	/**
+	 * Sets model reference for this deck
+	 * @param  stackModel model of stack.
+	 */
 	public void setModel(ICardDeck stackModel) {
 		deck = stackModel;		
 	}
-
+	
+	/**
+	 * Gets card from top
+	 * @return  card on top.
+	 */
 	public VisualCard top(){
 		return this.card;
 	}
