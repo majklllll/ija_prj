@@ -1,3 +1,8 @@
+/**
+ * This file contains class VisualCardPack
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
 import java.awt.event.*;
@@ -6,13 +11,20 @@ import src.share.ICard;
 
 import src.controler.*;
 
+
+/**
+*   This class represents both card repositories (picker and defer deck)
+*/
 public class VisualCardPack extends VisualAbstractDeck {
 	
 	private ICardRepository pack;
 	private VisualCard cardPicker;
 	private VisualCard cardDefer;
 	
-			
+	
+	/**
+	 * Paints picker and defer
+	 */			
 	public void paint() {
 		if(pack.isAnyHidden()){
 			// Hidden cards - cardback
@@ -72,7 +84,11 @@ public class VisualCardPack extends VisualAbstractDeck {
 			cardDefer = card;        	
         }
 	}
-
+	
+	/**
+	 * Sets model reference for this repository
+	 * @param  stackModel model of this stack.
+	 */
 	public void setModel(ICardRepository stackModel) {
 		pack = stackModel;		
 	}

@@ -1,3 +1,8 @@
+/**
+ * This file contains class VisualIcons
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
 import javax.swing.ImageIcon;
@@ -9,7 +14,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-//singleton storing icons
+
+/**
+*   This class is a singleton with icons' images
+*/
 public class VisualIcons {
 	static VisualIcons me = null;
 	private final int CARDS = 13;
@@ -19,7 +27,10 @@ public class VisualIcons {
 	BufferedImage patternSelected= null;
 	BufferedImage patternHint = null;
 	final static String RESOURCES = "/lib/resources";
-
+	
+	/**
+	 * Constructor loading all icons
+	 */
 	VisualIcons() {	
 		ImageIcon back = new ImageIcon(new ImageIcon(this.getClass()
 				.getResource(RESOURCES + "/back.png"))
@@ -108,12 +119,22 @@ public class VisualIcons {
 		readPatterns();
 	}
 	
+	/**
+	 * Singleton getter
+	 * @return singleton of this static class.
+	 */	
 	public static VisualIcons get() {
 		if(me == null)
 			me = new VisualIcons();	
 		return me;
 	}
 	
+	/**
+	 * Returns icon by its type and color
+	 * @param  type type of visual card.
+	 * @param  value value of card.
+	 * @return icon reference.
+	 */	
 	public ImageIcon getCardIcon(VisualCard.VisualCardColor type, int value) {
 		ArrayList<ImageIcon> cardSource;
 		if(this.useMiniatures){
@@ -142,14 +163,26 @@ public class VisualIcons {
 		}
 	}
 	
+	/**
+	 * Sets indicator of using miniatures
+	 * @param  value are miniatures used.
+	 */	
 	public void setUsingMiniatures(boolean value){
 		this.useMiniatures = value;		
 	}
 	
+	/**
+	 * Are icons minified?
+	 */	
 	public boolean areIconsMinified(){
 		return this.useMiniatures;	
 	}	
-
+	
+	/**
+	 * Returns buffered image of specific type 
+	 * @param  pattern pattern for special cards indicator.
+	 * @return buffered image.
+	 */
 	public BufferedImage getPattern(VisualCard.VisualCardPattern pattern){
 		switch(pattern){
 			case HINT_TARGET:
@@ -160,7 +193,10 @@ public class VisualIcons {
 				return new BufferedImage(150, 200, BufferedImage.TYPE_INT_ARGB);
 		}
 	}
-
+	
+	/**
+	 * Reads special card backgrounds for hints and selected cards
+	 */
 	private void readPatterns(){
 		try{
 			patternSelected = ImageIO.read(new File("resources/selected.png"));

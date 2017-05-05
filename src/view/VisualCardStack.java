@@ -1,3 +1,8 @@
+/**
+ * This file contains class VisualCardStack
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
 import java.awt.event.MouseAdapter;
@@ -12,10 +17,17 @@ import src.controler.CommandMoveMulti;
 import src.controler.ICommand;
 import src.share.ICard;
 
+
+/**
+*   This class represents one card stack on board
+*/
 public class VisualCardStack extends VisualAbstractDeck {
 	ICardStack stack;
 	VisualCard topCard;
-		
+	
+	/**
+	 * Paints this stack
+	 */		
 	public void paint() {
 		int distance = VisualIcons.get().areIconsMinified() ? 15 : 30;
 		
@@ -72,6 +84,9 @@ public class VisualCardStack extends VisualAbstractDeck {
 		}
 	}
 	
+	/**
+	 * Moves stack
+	 */	
 	public void moveStackHere(VisualCard card){
 		if(board.isMoveSourceSelected()){
 			ICommand command = null;
@@ -96,11 +111,19 @@ public class VisualCardStack extends VisualAbstractDeck {
 		else board.setSelectedMoveSource(stack, card);		
 	}
 	
-
+	
+	/**
+	 * Sets model reference of this stack
+	 * @param  stackModel model of stack.
+	 */
 	public void setModel(ICardStack stackModel) {
 		stack = stackModel;		
 	}
-
+	
+	/**
+	 * Gets card from top of this stack
+	 * @return card model reference.
+	 */
 	public VisualCard top(){
 		return this.topCard;
 	}

@@ -1,3 +1,8 @@
+/**
+ * This file contains class VisualBoard
+ * @author      Jan Hrstka, Michal Peška
+ */
+
 package src.view;
 
 import java.util.ArrayList;
@@ -20,6 +25,10 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FilenameFilter;
 
+
+/**
+*   This class represents one board in window of GUI
+*/
 public class VisualBoard extends JPanel implements ISupportRepaint {
 	private IGameBoard boardModel;
 	private CommandBuilder commander;
@@ -34,6 +43,10 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	private static final int ButtonWidth = 90;
 	private static final int ButtonHeight = 25;
 	
+	/**
+	 * Constructor of this board
+	 * @param  bModel model of board.
+	 */	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
 		boardModel = bModel;	
@@ -42,6 +55,9 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
         this.paintAll();
 	}
 	
+	/**
+	 * Paints all features of this board
+	 */	
 	public void paintAll() {
 		//initialize buttons
 		JButton btnUndo = new JButton("Undo");
@@ -168,6 +184,11 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		
 
 	}
+  
+  	
+	/**
+	 * Paints game over announcement
+	 */
 	public void paintGameOver(){
 		JButton btnClose= new JButton("Game Over - You have won");
 		btnClose.setBounds(250, 30, 200, 80);
@@ -182,6 +203,9 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		});
 	}	
 	
+	/**
+	 * Repaints all features of this board
+	 */	
 	public void repaint() {
 		removeListeners();		
 		this.removeAll();
@@ -201,6 +225,9 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		this.revalidate();
 	}
 	
+	/**
+	 * Removes all listeners from board
+	 */	
 	public void removeListeners(){	
 		Component[] components = this.getComponents();
 		for(Component component: components){
@@ -213,14 +240,26 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		}
 	}
 	
+	/**
+	 * Returns command builder reference
+	 * @return Command builder reference.
+	 */	
 	public CommandBuilder getCommandBuilder(){
 		return commander;	
 	}
 	
+	/**
+	 * Discard selection of card and source
+	 */	
 	public void unselectedMoveSource(){
 		this.setSelectedMoveSource(null, null);		
 	}
-
+	
+	/**
+	 * Sets selected move source
+	 * @param  deck deck to select.
+	 * @param  sourceCard card to select.
+	 */
 	public void setSelectedMoveSource(ICardDeck deck, VisualCard sourceCard){
 		if(this.selectedSourceCard != null)
 			this.selectedSourceCard.setSelected(false);	
@@ -234,6 +273,11 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 				this.createHints();
 		}
 	}
+  
+  	
+	/**
+	 * Create visual hints
+	 */
 	private void createHints(){
 		ICardHint hint = this.boardModel.hintForCard(this.selectedSourceCard.toCardModel());
 		this.clearHints();
@@ -257,34 +301,59 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			}
 		}
 	}
-
+	
+	/**
+	 * Clears hints
+	 */
 	private void clearHints(){
 		while(!this.hintTargets.isEmpty()){
 			this.hintTargets.remove(0).setHintTarget(false);
 		}
 	}
-
+ 	
+	/**
+	 * Returns selected move source
+	 * @return card deck.
+	 */
 	public ICardDeck getSelectedMoveSource(){
 		return this.selectedSource;		
 	}
 	
+	/**
+	 * Is move source selected?
+	 * @return if is it selected.
+	 */	
 	public boolean isMoveSourceSelected() {
 		return this.selectedSource != null;				
 	}
 	
+	/**
+	 * Returns selected card for multiple card move
+	 * @return card model reference.
+	 */	
 	public ICard getMultiMoveCard(){
 		return this.selectedMultiMoveCard;		
 	}
 	
+	/**
+	 * Sets card for move of multiple cards
+	 * @param  card card to set.
+	 */	
 	public void setMultiMoveCard(ICard card) {
 		this.selectedMultiMoveCard = card;				
 	}
 	
+	/**
+	 * Closes this board and removes it from window
+	 */	
 	public void closeThisBoard(){
 		MainView window = (MainView)this.getTopLevelAncestor();
 		window.removeBoard(this);
 	}
 	
+	/**
+	 * Asks for a file name and let execute load command with this file
+	 */	
 	public void loadFile(){
 		// Load list of files in directory "saved"
 		// If this pathname does not denote a directory, then listFiles() returns null.
