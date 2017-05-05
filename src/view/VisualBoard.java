@@ -50,19 +50,19 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		this.add(btnUndo);
 		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(150, 5, 100, 25);
+		btnSave.setBounds(110, 5, 100, 25);
 		this.add(btnSave);
 		
 		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(300, 5, 100, 25);
+		btnLoad.setBounds(220, 5, 100, 25);
 		this.add(btnLoad);		
 		
 		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(450, 5, 100, 25);
+		btnClose.setBounds(330, 5, 100, 25);
 		this.add(btnClose);	
 
 		JButton btnHint= new JButton("Hint:Off");
-		btnHint.setBounds(600, 5, 100, 25);
+		btnHint.setBounds(440, 5, 100, 25);
 		this.add(btnHint);		
 		
 		//initialize cards
@@ -287,7 +287,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			} );
 
 		// Inform user when there is not any saved game.
-		if(listOfFiles.length <= 0){
+		if(listOfFiles == null || listOfFiles.length <= 0){
 			JOptionPane.showMessageDialog(null, "No saved game found.", "There are no saved games.", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
