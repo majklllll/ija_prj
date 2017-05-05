@@ -1,7 +1,7 @@
 
 /**
   * File:       CardRepositoryModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -21,6 +21,9 @@ import src.share.ICardRepository;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Class representing repository/source pack of cards. 
+ */
 public class CardRepositoryModel extends AbstractCardDeck implements ICardRepository{
     protected ArrayList<ICard> hiddenCards = new ArrayList<ICard>();
     private Random generator = new Random();
@@ -33,16 +36,23 @@ public class CardRepositoryModel extends AbstractCardDeck implements ICardReposi
         this.maximalSize = maximalSize;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canAccessIndex(int index){
         return index >= 0 && index < this.size();   
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canPutCard(ICard card){
         return false;
     }
 
+    /**
+     * Fill deck with card taken from another deck.
+     * @param deck is some card deck from which shold be cards taken.
+     * @param count specifiy how much cards should be inserted into this deck.
+     */
     public void fill(ICardDeck deck, int count) throws IllegalArgumentException{
         if(deck.size() < count)
             throw new IllegalArgumentException("Fill: There is not enought cards in deck.");
@@ -52,6 +62,10 @@ public class CardRepositoryModel extends AbstractCardDeck implements ICardReposi
             this.hiddenCards.add(deck.pop());
     }
 
+    /**
+     * Show next hidden card.
+     * @return true when card was shown.
+     */
     public boolean showNext(){
         if(this.sizeHidden() <= 0) 
             return false;
@@ -60,6 +74,10 @@ public class CardRepositoryModel extends AbstractCardDeck implements ICardReposi
         return this.cards.add(card); // Turn up top hidden card.
     }
 
+    /**
+     * Hide top visible card in deck.
+     * @return true when card was hidden.
+     */
     public boolean hideTopCard(){
         if(this.size() <= 0)
             return false;
@@ -68,6 +86,10 @@ public class CardRepositoryModel extends AbstractCardDeck implements ICardReposi
         return this.hiddenCards.add(card);
     }
 
+    /**
+     * Turn over whole pack - mix and hide all cards.
+     * @return true when deck was turend over.
+     */
     public boolean turnOver(){
         if(isAnyHidden())
             return false;
@@ -79,10 +101,18 @@ public class CardRepositoryModel extends AbstractCardDeck implements ICardReposi
         return true;
     } 
 
+    /**
+     * Get count of hiden cards.
+     * @return count of hidden cards.
+     */
     public int sizeHidden(){
         return this.hiddenCards.size();
     }
 
+    /**
+     * Check if there is any hidden card.
+     * @return true when there is at least one hidden card in deck.
+     */
     public boolean isAnyHidden(){
         return sizeHidden() > 0;
     }

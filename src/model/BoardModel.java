@@ -1,7 +1,7 @@
 
 /**
   * File:       BoardModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -30,6 +30,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * Base class representing playing board.
+ * Contaings decks and stack with cards.
+ */
 public class BoardModel implements IGameBoard{
     private boolean gameOver                          = false;
     private ICardFactory factory                      = new CardModelFactory();
@@ -58,50 +62,90 @@ public class BoardModel implements IGameBoard{
             this.decks.get(index - 1).setName("d" + index);
     }
 
+    /**
+     * Register new observer.
+     * @param observer observer to be notified about changes.
+     */
     public void registerObserver(ISupportRepaint observer){
         observers.add(observer);
     }
 
+    /**
+     * Notify all observers about changes.
+     */
     public void update(){
         this.gameOver = this.checkGameOver();
         for(ISupportRepaint observer : this.observers)
             observer.repaint();
     }
 
+    /**
+     * Get card repository.
+     * @return card repository.
+     */
     public ICardRepository getRepository(){
         return this.repository;
     }
 
+    /**
+     * Get deck at given position.
+     * @param index position of deck to be retrieved.
+     * @return deck at given position.
+     */
     public ICardDeck getDeck(int index){
         if(index < 0 || index > this.deckCount())
             return null;
         return this.decks.get(index);
     }
 
+    /**
+     * Get stack at given position.
+     * @param index position of stack to be retrieved.
+     * @return stack at given position.
+     */
     public ICardStack getStack(int index){
         if(index < 0 || index > this.stackCount())
             return null;
         return this.stacks.get(index);
     }
 
+    /**
+     * Get count of decks in board.
+     * @return count of decks in board.
+     */
     public int deckCount(){
         return this.decks.size();
     }
 
+    /**
+     * Get count of stacks in board.
+     * @return count of stacks in board.
+     */
     public int stackCount(){
         return this.stacks.size();
     }
 
+    /**
+     * Check whenever is any nint availavle.
+     * @return true when there is at least one hint.
+     */
     public boolean hintAvailable(){
         return this.cardHints == null ? false : this.cardHints.size() > 0;
     }
 
+    /**
+     * Get hints for all cards.
+     * @return list of hints.
+     */
     public ArrayList<ICardHint> getHints(){
         ArrayList<ICardHint> hints = this.cardHints;
         this.cardHints = null;
         return hints;
     }
 
+    /**
+     * Create hints for all cards.
+     */
     public void createHints(){
         this.cardHints = new ArrayList<ICardHint>();
         
@@ -130,10 +174,22 @@ public class BoardModel implements IGameBoard{
             }
     }
 
+    /**
+     * Create card hint for give card.
+     * @param card card for which should be hint constructed.
+     * @return hint for given card.
+     */
     public ICardHint hintForCard(ICard card){
         return this.hintForCard(card, null, true);
     }
 
+    /**
+     * Create card hint for give card.
+     * @param card card for which should be hint constructed.
+     * @param sourceDeck is deck in which is card placed.
+     * @param includeDecks specify whenever include decks.
+     * @return hint for given card.
+     */
     private ICardHint hintForCard(ICard card, ICardDeck sourceDeck, boolean includeDecks){
         if(card == null)
             return null;
@@ -150,6 +206,11 @@ public class BoardModel implements IGameBoard{
         return hint;
     }
 
+    /**
+     * Save state of board into given file.
+     * @param fileName name of file into which shoud be board saved.
+     * @return true when board was saved successfuly.
+     */
     public boolean save(String fileName){
         FileOutputStream fos    = null;
         ObjectOutputStream oos  = null;
@@ -172,6 +233,11 @@ public class BoardModel implements IGameBoard{
         return true;
     }
 
+    /**
+     * Load state of board from given file.
+     * @param fileName name of file from which shoud be board loaded.
+     * @return true when board was loaded successfuly.
+     */
     public boolean load(String fileName){
         ObjectInputStream ois        = null;
         FileInputStream fis          = null;
@@ -205,6 +271,10 @@ public class BoardModel implements IGameBoard{
         return false;
     }
 
+    /**
+     * Check if game has ended.
+     * @return true when game is over.
+     */
     public boolean checkGameOver(){
         for(ICardDeck deck : this.decks)
             if(deck.isEmpty() || deck.top().value() != ICard.ValueConvertor.King)
@@ -212,6 +282,10 @@ public class BoardModel implements IGameBoard{
         return true;
     }
 
+    /**
+     * Check if game has ended.
+     * @return true when game is over.
+     */
     public boolean isGameOver(){
         return this.gameOver;
     }

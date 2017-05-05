@@ -1,7 +1,7 @@
 
 /**
   * File:       CardDeckModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -18,6 +18,9 @@ package src.model;
 import src.share.ICard;
 import src.share.ICardDeck;
 
+/**
+ * Class representing deck/target pack of cards. 
+ */
 public class CardDeckModel extends AbstractCardDeck{
     private ICard.Color expectedColor;
 
@@ -31,11 +34,13 @@ public class CardDeckModel extends AbstractCardDeck{
         this.maximalSize = maximalSize;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canAccessIndex(int index){
         return index == this.size() - 1;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canPutCard(ICard card){
         if(card == null)
@@ -45,6 +50,10 @@ public class CardDeckModel extends AbstractCardDeck{
         return this.top().value() + 1 == card.value() && this.top().color() == card.color();
     }
 
+    /**
+     * Get color of deck, only cards with same color can be inserted.
+     * @return color of deck.
+     */
     public ICard.Color getExpectedColor(){
         return this.expectedColor;
     }

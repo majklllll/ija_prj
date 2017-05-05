@@ -1,7 +1,7 @@
 
 /**
   * File:       CardStackModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -21,6 +21,9 @@ import src.share.ICard;
 import src.share.ICardDeck;
 import src.share.ICardStack;
 
+/**
+ * Class representing stack/working pack of cards. 
+ */
 public class CardStackModel extends AbstractCardDeck implements ICardStack{
     
     public CardStackModel(){
@@ -31,6 +34,7 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
         this.maximalSize = maximalSize;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canPutCard(ICard card){
         if(card == null)
@@ -40,11 +44,17 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
         return !this.top().similarColorTo(card) && card.value() == this.top().value() - 1;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canAccessIndex(int index){
         return index >= 0 && index < this.size();
     }
-
+ 
+    /**
+     * Isert whole deck at the top of this deck.
+     * @param deck dekc to be inserted.
+     * @return true when deck was inserted.
+     */
     public boolean put(ICardDeck deck){
         if((this.size() + deck.size() > this.capacity()) || !this.canPutCard(deck.get(0)))
             return false;
@@ -54,11 +64,20 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
         return true;
     }
 
+    /**
+     * Remove multiple cards from deck srting with given card.
+     * @param card from which should be deck taken.
+     * @return deck of card begining with specified card.
+    */
     public ICardDeck pop(ICard c){
         return this.takeFrom(c);
     }
 
-    // Take cards above specified card and create new deck from them.
+    /**
+     * Take cards above specified card and create new deck from them.
+     * @param card from which should be deck taken.
+     * @return deck of card begining with specified card.
+     */
     public ICardDeck takeFrom(ICard card){
         CardStackModel stack = new CardStackModel(this.size());
         int indexOfMatch = this.cards.indexOf(card); 
@@ -67,7 +86,11 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
         return stack;
     }
 
-    // Fill CardStack with some cards taken from another deck. Used to initilize stack.
+    /**
+     * Fill CardStack with some cards taken from another deck. Used to initilize stack.
+     * @param deck dekc from which should be cards taken.
+     * @param count count of inserted cards.
+     */
     public void fill(ICardDeck deck, int count) throws IllegalArgumentException{
         if(count > deck.size())
             throw new IllegalArgumentException("Fill: Deck does not contain enough cards.");
@@ -77,6 +100,11 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
             this.cards.add(deck.pop());
     }
 
+    /**
+     * Get card with specified value.
+     * @param value value of card to be matched.
+     * @return copy of card from deck with given value.
+     */
     public ICard getByValue(int value){
         for(int index = this.size() - 1; index >= 0; index--)
             if(this.cards.get(index).value() == value)
@@ -84,6 +112,11 @@ public class CardStackModel extends AbstractCardDeck implements ICardStack{
         return null;
     }
 
+    /**
+     * Get card with specified color.
+     * @param color color of card to be matched.
+     * @return copy of card from deck with given color.
+     */
     public ICard getByColor(ICard.Color color){
         for(int index = this.size() - 1; index >= 0; index--)
             if(this.cards.get(index).color() == color)

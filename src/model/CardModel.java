@@ -1,7 +1,7 @@
 
 /**
   * File:       CardModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -20,6 +20,9 @@ import java.lang.Object;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class representing single card.
+ */
 public class CardModel extends Object implements ICard{
     
     // Properties
@@ -61,39 +64,76 @@ public class CardModel extends Object implements ICard{
         return Arrays.asList(ICard.Color.toHashList()).indexOf(this.color.toString()) * this.value;
     }
 
+    /**
+     * Create copy of card.
+     * @return copy of card.
+     */
     public ICard clone(){
         return new CardModel(this.color, this.value, this.isTurnedUp);
     }
 
+    /**
+     * Get color of card.
+     * @return color of card.
+     */
     public ICard.Color color(){
         return this.color;
     }
 
+    /**
+     * Get value of card.
+     * @return value of card.
+     */
     public int value(){
         return this.value;
     }
 
+    /**
+     * Conveert card into simple string form in order of printing.
+     * @return string representation of card.
+     */
     public String toString(){
         return ICard.ValueConvertor.toString(this.value) + "(" + this.color.toString() + ")";
     }
 
+    /**
+     * Check whenever has card similar (red or black) color to given card.
+     * @param card card ot be compared with.
+     * @return true when both cards are red or both are black.
+     */
     public boolean similarColorTo(ICard card){
         return card == null ? false : this.color.similarColorTo(card.color());
     }
 
+    /**
+     * Get difference betweet values of cards.
+     * @return difference between value of given card and current card.
+     */
     public int compareValue(ICard card){
         return card == null ? Integer.MAX_VALUE : this.value - card.value();
     }
 
+    /**
+     * Check whenever is card turned by face up.
+     * @return true when card is turned face up.
+     */
     public boolean isTurnedFaceUp(){
         return this.isTurnedUp;
     }
 
+    /**
+     * Turns card face up.
+     * @return true if card was turned.
+     */
     public boolean turnFaceUp(){
         if(this.isTurnedUp) return false;
         return this.isTurnedUp = true;
     }
 
+    /**
+     * Turns card face down.
+     * @return true if card was turned.
+     */
     public boolean turnFaceDown(){
         if(!this.isTurnedUp) return false;
         this.isTurnedUp = false;

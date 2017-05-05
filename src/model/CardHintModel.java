@@ -1,7 +1,7 @@
 
 /**
   * File:       ICardHint.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -21,6 +21,9 @@ import src.share.ICardDeck;
 import src.share.ICardStack;
 import src.share.ICard;
 
+/**
+ * Class representing hint bind to card.
+ */
 public class CardHintModel implements ICardHint{
     private ArrayList<ICardDeck>  decks  = new ArrayList<ICardDeck>();
     private ArrayList<ICardStack> stacks = new ArrayList<ICardStack>();
@@ -36,38 +39,74 @@ public class CardHintModel implements ICardHint{
         this.sourceDeck = sourceDeck;
     }
 
+    /**
+     * Get reference to card for which is hint created.
+     * @return card for which is hint created.
+     */
     public ICard getCard(){
         return this.card;
     }
     
+    /**
+     * Get list of decks, where can ba card placed.
+     * @return arraylist of deck, where can be card placed.
+     */
     public ArrayList<ICardDeck> getCardDecks(){
         return this.decks;
     }
 
+    /**
+     * Get list of stacks, where can ba card placed.
+     * @return arraylist of stacks, where can be card placed.
+     */
     public ArrayList<ICardStack> getCardStacks(){
         return this.stacks;
     }
 
+    /**
+     * Get deck from which is card taken.
+     * @return deck from which is card taken,
+     */
     public ICardDeck getSourceDeck(){
         return this.sourceDeck;
     }
 
+    /**
+     * Check whenever is hint empty - no possible mover were found.
+     * @return true when deck is empty.
+     */
     public boolean isEmpty(){
         return !this.hasCardDeck() && !this.hasCardStack(); 
     }
 
+    /**
+     * Check if card can be placed at leats into one stack.
+     * @return true when some suitable stakcs were found.
+     */
     public boolean hasCardStack(){
         return !this.stacks.isEmpty();
     }
 
+    /**
+     * Check if card can be placed at leats into one deck.
+     * @return true when some suitable decks were found.
+     */
     public boolean hasCardDeck(){
         return !this.decks.isEmpty();
     }
 
+    /**
+     * Check if source deck is specified.
+     * @return true when source deck is specified.
+     */
     public boolean hasSourceDeck(){
         return this.sourceDeck != null;
     }
 
+    /**
+     * Convert card hint into simple string form in order of printing.
+     * @return string representation of card hint.
+     */
     public String toString(){
         ArrayList<String> targets = new ArrayList<String>();
         for(ICardDeck deck : this.decks)
@@ -77,10 +116,18 @@ public class CardHintModel implements ICardHint{
         return this.card.toString() + " -> " + String.join(" | ", targets);
     }
 
+    /**
+     * Add next card stack as a target where can be card placed.
+     * @param stack is target where can be card placed.
+     */
     public boolean add(ICardStack stack){
         return this.stacks.add(stack);
     }
 
+    /**
+     * Add next card deck as a target where can be card placed.
+     * @param deck is target where can be card placed.
+     */
     public boolean add(ICardDeck deck){
         return this.decks.add(deck);
     }

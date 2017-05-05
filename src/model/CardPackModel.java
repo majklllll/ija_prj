@@ -1,7 +1,7 @@
 
 /**
   * File:       CardPackModel.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -20,6 +20,10 @@ import src.share.ICardDeck;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * Class representing pack of cards in random order.
+ * Provides support for card mixing. 
+ */
 public class CardPackModel extends AbstractCardDeck{
     private Random generator = new Random();
 
@@ -31,11 +35,13 @@ public class CardPackModel extends AbstractCardDeck{
         this.maximalSize = maximalSize;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canAccessIndex(int index){
         return index >= 0 && index < this.size();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean canPutCard(ICard card){
         return !this.contains(card);
@@ -43,6 +49,7 @@ public class CardPackModel extends AbstractCardDeck{
 
     /**
      *  Create deck of size 52 and fill it with cards. 
+     * @return standard deck.
      */
     public static CardPackModel createStandardPack(){
         CardPackModel packModel = new CardPackModel();
@@ -53,7 +60,8 @@ public class CardPackModel extends AbstractCardDeck{
     }
 
     /**
-     * Mix cards in pack. Parameters specify count of swaps of any card in collection.
+     * Mix cards in pack.
+     * @param swaps specify count of swaps of any card in collection.
      */
     public void mix(int swaps){
         for(int swap = 0; swap < swaps; swap++){
