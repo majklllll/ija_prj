@@ -34,6 +34,7 @@ import org.junit.Test;
 
 /**
  * Test class for Solitaire Klondike.
+ * Provides simple unit tests for models.
  */
 public class KlondikeModelTester{
     
