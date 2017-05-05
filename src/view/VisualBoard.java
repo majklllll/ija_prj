@@ -27,12 +27,12 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	private CommandBuilder commander;
 	
 	private VisualCardPack picker;
-
 	private ArrayList<VisualCardDeck> decks = new ArrayList<VisualCardDeck>();
 	private ArrayList<VisualCardStack> stacks = new ArrayList<VisualCardStack>();
 	
-	private ICardDeck selectedSource;
-	private ICard selectedMultiMoveCard;
+	private ICardDeck selectedSource = null;
+	private ICard selectedMultiMoveCard = null;
+	private VisualCard selectedSourceCard = null;
 	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
@@ -183,16 +183,26 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		return commander;	
 	}
 	
-	public void setSelectedMoveSource(ICardDeck deck){
-		this.selectedSource = deck;		
-			
+	public void unselectedMoveSource(){
+		this.setSelectedMoveSource(null, null);		
 	}
+
+	public void setSelectedMoveSource(ICardDeck deck, VisualCard sourceCard){
+		if(this.selectedSourceCard != null)
+			this.selectedSourceCard.setSelected(false);
+		if(sourceCard != null)
+			sourceCard.setSelected(true);
+		this.selectedSource = deck;		
+		this.selectedSourceCard = sourceCard;
+		this.setMultiMoveCard(null);
+	}
+
 	public ICardDeck getSelectedMoveSource(){
 		return this.selectedSource;		
 	}
 	
 	public boolean isMoveSourceSelected() {
-		return (this.selectedSource != null);				
+		return this.selectedSource != null;				
 	}
 	
 	public ICard getMultiMoveCard(){

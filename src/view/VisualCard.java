@@ -1,29 +1,36 @@
 package src.view;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.io.Serializable;
-
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import src.share.ICard;
-
 
 public class VisualCard extends JLabel {
 	private float opacity;
+	private static final float OpacityPattern = 0.5f;
 	ICard.Color type;
 	int value;
-	VisualCard(VisualCard.VisualCardColor cardType, int cardValue, int x, int y) {
-		ImageIcon icon = VisualIcons.get().getCardIcon(cardType, cardValue);
-		
+	boolean isSelected = false;
+	boolean isHintTarget = false;
+
+	VisualCard(VisualCard.VisualCardColor cardType, int cardValue, int x, int y){
+		ImageIcon icon = VisualIcons.get().getCardIcon(cardType, cardValue);	
 		this.setIcon(icon);
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-		
-		
 	}
+
     public static enum VisualCardColor{
         CLUBS("C"),
         DIAMONDS("D"),
@@ -34,6 +41,7 @@ public class VisualCard extends JLabel {
     	ARROWS("ARROW");
     	
     	private final String cardValue;
+
         private VisualCardColor(String value){
             this.cardValue = value;
         }
@@ -52,6 +60,31 @@ public class VisualCard extends JLabel {
         	return CLUBS;
         }
     }
+
+	public static enum VisualCardPattern{
+		NONE("NONE"),
+		SELECTED("SELECTED"),
+		HINT_TARGET("HINT TARGET");
+
+		private final String cardValue;
+
+		private VisualCardPattern(String value){
+			this.cardValue = value;
+		}
+	}
+
+	@Override
+    public void paintComponent(final Graphics g) {
+		super.paintComponent(g);
+		if(isSelected || isHintTarget){
+			Graphics2D g2 = (Graphics2D)g;
+			BufferedImage im = isSelected ? VisualIcons.get().getPattern(VisualCard.VisualCardPattern.SELECTED) :
+											VisualIcons.get().getPattern(VisualCard.VisualCardPattern.HINT_TARGET);
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, VisualCard.OpacityPattern));
+			g2.drawRenderedImage((RenderedImage)im, AffineTransform.getTranslateInstance(0, 0));
+			g2.dispose();
+		}
+    }
     
 	public void setOpacity(float opacity) {
 	    this.opacity = opacity;
@@ -61,14 +94,13 @@ public class VisualCard extends JLabel {
 	    return this.opacity;
 	}
 	
-	public void setSelected(){
-		//System.out.println("setting it");
-		this.setOpacity(0.5f);	
-		//super.repaint();
-		//this.revalidate();
-		
+	public void setSelected(boolean isSelected){
+		this.isSelected = isSelected;
+		repaint();
 	}
-	
-	
-	
+
+	public void setHintTarget(boolean isHintTarget){
+		this.isHintTarget = isHintTarget;
+		repaint();
+	}
 }

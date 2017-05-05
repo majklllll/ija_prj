@@ -38,11 +38,11 @@ public class VisualCardDeck extends VisualAbstractDeck {
 					ICommand command = new CommandMove(source, deck);
 					if(command.canExecute()){
 						board.getCommandBuilder().execute(command);
-						board.setSelectedMoveSource(null); //deselect source
+						board.unselectedMoveSource();
 					}
 				}		
 				else{
-					board.setSelectedMoveSource(deck);
+					board.setSelectedMoveSource(deck, cardVis);
 				}		    	
 		    }  
 		}); 		

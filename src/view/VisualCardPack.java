@@ -14,33 +14,30 @@ public class VisualCardPack extends VisualAbstractDeck {
 	
 			
 	public void paint() {
-		
-		if(pack.isAnyHidden()) {
-			//hidden cards - cardback
-			
+		if(pack.isAnyHidden()){
+			// Hidden cards - cardback
 			VisualCard card = new VisualCard(VisualCard.VisualCardColor.BACK, 0, 0, y  );
 			board.add(card);
 			cardPicker = card;	
 			
-			//add event handler - next card
+			// Add event handler - next card
 			card.addMouseListener(new MouseAdapter()  
 			{  
 			    public void mouseReleased(MouseEvent e)  
 			    {  
-			    	//show next card
+			    	// Show next card
 			    	ICommand command = new CommandNext(pack);
 			    	board.getCommandBuilder().execute(command);
 			    }  
 			}); 
-			
-			
-		}else{
-			//no hidden card - arrows
+		}
+		else{
+			// No hidden card - arrows
 			VisualCard card = new VisualCard(VisualCard.VisualCardColor.ARROWS, 0, 0, y  );
 			board.add(card);
 			cardPicker = card;
 			
-			//add event handler - turn pack
+			// Add event handler - turn pack
 			card.addMouseListener(new MouseAdapter()  
 			{  
 			    public void mouseReleased(MouseEvent e)  
@@ -50,40 +47,33 @@ public class VisualCardPack extends VisualAbstractDeck {
 			    }  
 			}); 
 		}
-		
-		
 	
         if(!pack.isEmpty()) {
-        	//there is a card
+        	// There is a card
         	ICard modelCard = pack.top();
         	VisualCard card = new VisualCard(VisualCard.VisualCardColor.visualColor(modelCard.color()), modelCard.value(), x, y  );
 			board.add(card);
 			cardDefer = card; 
 			
-			//add event handler - select card to move
+			// Add event handler - select card to move
 			card.addMouseListener(new MouseAdapter()  
 			{  
 			    public void mouseReleased(MouseEvent e)  
 			    {  
-			    	board.setSelectedMoveSource(pack);
-			    	//VisualCard origin = (VisualCard) e.getSource();
-			    	//origin.setSelected();
-			    	//board.repaint();
+			    	board.setSelectedMoveSource(pack, card);
 			    }  
 			}); 
 			
-        }else{
-        	//there is no card
-			VisualCard card = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y  );
+        }
+		else{
+        	// There is no card
+			VisualCard card = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y);
 			board.add(card);
 			cardDefer = card;        	
-        	
         }
-
-		
 	}
+
 	public void setModel(ICardRepository stackModel) {
 		pack = stackModel;		
 	}
-
 }

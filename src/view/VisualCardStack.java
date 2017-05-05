@@ -19,15 +19,11 @@ public class VisualCardStack extends VisualAbstractDeck {
 		int distance = VisualIcons.get().areIconsMinified() ? 15 : 30;
 		
 		//adding cards in reverse direction to ensure right card overlay
-		for(int i = stack.size() - 1; i >= 0; i--) {
-			VisualCard card;
+		for(int i = stack.size() - 1; i >= 0; i--){
 			ICard stackCard = stack.get(i);
-			if(stackCard.isTurnedFaceUp()){
-				card = new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + distance * i );	
-			}
-			else{
-				card = new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + distance * i );
-			}
+			VisualCard card = stackCard.isTurnedFaceUp() ? 
+				new VisualCard( VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y + distance * i ) :
+				new VisualCard( VisualCard.VisualCardColor.BACK, 0, x, y + distance * i );
 			board.add(card);
 			
 			// Card selected - move to stack
@@ -45,28 +41,21 @@ public class VisualCardStack extends VisualAbstractDeck {
 								// Move one card.
 								ICardDeck source = board.getSelectedMoveSource();
 								command = new CommandMove(source, stack);
-								board.setSelectedMoveSource(null);
+								board.unselectedMoveSource();
 							}
 							else{
 								// Move many cards.	
 								ICardStack source = (ICardStack)board.getSelectedMoveSource();
 								command = new CommandMoveMulti(source, stack, board.getMultiMoveCard());
-								board.setSelectedMoveSource(null);								
-								board.setMultiMoveCard(null);
+								board.unselectedMoveSource();							
 							}
 
 							// Execute command xor set this as a source.
 							if(command.canExecute())
 								 board.getCommandBuilder().execute(command);
-							else{
-								board.setSelectedMoveSource(stack);
-								card.setSelected(); // <------- CHECK
-							}
+							else board.setSelectedMoveSource(stack, card);
 						}
-						else{
-							board.setSelectedMoveSource(stack);
-							card.setSelected(); // <------- CHECK
-						}									    	
+						else board.setSelectedMoveSource(stack, card);		    	
 				    }  
 				}); 
 			
@@ -78,9 +67,8 @@ public class VisualCardStack extends VisualAbstractDeck {
 					{  
 					    public void mouseReleased(MouseEvent e)  
 					    {  
-					    	board.setSelectedMoveSource(stack);
+					    	board.setSelectedMoveSource(stack, card);
 						    board.setMultiMoveCard(stackCard);
-							card.setSelected(); 	// <------- CHECK    	
 					    }  
 					}); 				
 			}
