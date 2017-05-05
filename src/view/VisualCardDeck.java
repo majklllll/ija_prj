@@ -16,20 +16,12 @@ public class VisualCardDeck extends VisualAbstractDeck {
 			
 	public void paint() {
 		ICard stackCard = deck.top();
-		VisualCard cardVis;
-		
-		if(stackCard != null){
-			cardVis = new VisualCard(VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y );
-			this.card = cardVis;
-			board.add(card);	
-		}
-		else{
-			cardVis = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
-			this.card = cardVis;
-			board.add(card);
-		}
+		this.card = stackCard != null ?
+			new VisualCard(VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y ) :
+			new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
+		board.add(this.card);	
 			
-		cardVis.addMouseListener(new MouseAdapter()  
+		this.card.addMouseListener(new MouseAdapter()  
 		{  
 		    public void mouseReleased(MouseEvent e)  
 		    {  
@@ -42,7 +34,7 @@ public class VisualCardDeck extends VisualAbstractDeck {
 					}
 				}		
 				else{
-					board.setSelectedMoveSource(deck, cardVis);
+					board.setSelectedMoveSource(deck, card);
 				}		    	
 		    }  
 		}); 		
@@ -50,5 +42,9 @@ public class VisualCardDeck extends VisualAbstractDeck {
 
 	public void setModel(ICardDeck stackModel) {
 		deck = stackModel;		
+	}
+
+	public VisualCard top(){
+		return this.card;
 	}
 }

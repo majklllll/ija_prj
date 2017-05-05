@@ -25,14 +25,14 @@ import java.io.FilenameFilter;
 public class VisualBoard extends JPanel implements ISupportRepaint {
 	private IGameBoard boardModel;
 	private CommandBuilder commander;
-	
 	private VisualCardPack picker;
 	private ArrayList<VisualCardDeck> decks = new ArrayList<VisualCardDeck>();
 	private ArrayList<VisualCardStack> stacks = new ArrayList<VisualCardStack>();
-	
+	private ArrayList<VisualCard> hintTargets = new ArrayList<VisualCard>();
 	private ICardDeck selectedSource = null;
 	private ICard selectedMultiMoveCard = null;
 	private VisualCard selectedSourceCard = null;
+	private boolean hintRequested = false;
 	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
@@ -49,23 +49,21 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		btnUndo.setBounds(0, 5, 100, 25);
 		this.add(btnUndo);
 		
-		//initialize buttons
-		JButton btnHint = new JButton("Hints");
-		btnHint.setBounds(110, 5, 100, 25);
-		this.add(btnHint);
-		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(220, 5, 100, 25);
+		btnSave.setBounds(150, 5, 100, 25);
 		this.add(btnSave);
 		
 		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(330, 5, 100, 25);
+		btnLoad.setBounds(300, 5, 100, 25);
 		this.add(btnLoad);		
 		
 		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(440, 5, 100, 25);
+		btnClose.setBounds(450, 5, 100, 25);
 		this.add(btnClose);	
-			
+
+		JButton btnHint= new JButton("Hint:Off");
+		btnHint.setBounds(600, 5, 100, 25);
+		this.add(btnHint);		
 		
 		//initialize cards
 		int basicValue = this.getHeight();
@@ -77,6 +75,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		packPicker.setXY(cardSpace * (1), /*(basicValue / 20)*/ 35  );
 		packPicker.setPanel(this);
 		packPicker.paint();
+		packPicker.setName("r1");
 		picker = packPicker;	
 		
 		//add stack
@@ -86,6 +85,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			stack.setXY(cardSpace * (i+1), (int)(basicValue / 2.4 )  );
 			stack.setPanel(this);
 			stack.paint();
+			stack.setName("s" + (i + 1));
 			stacks.add(stack);
 		}
 
@@ -96,6 +96,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			deck.setXY(cardSpace * (i+4), /*(basicValue / 20)*/ 35  );
 			deck.setPanel(this);
 			deck.paint();
+			deck.setName("d" + (i + 1));
 			decks.add(deck);
 		}
 		
@@ -120,18 +121,6 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		        }
 		    }
 		});
-		
-		//add event handlers
-		btnHint.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		    	ICommand command = new ControlCommand("hint");
-		    	getCommandBuilder().execute(command);
-		    	//System.out.println(boardModel.getHints());
-		    }
-		});
-		
-		
 
 		//add event handlers
 		btnLoad.addActionListener(new ActionListener() {
@@ -147,6 +136,22 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		    public void actionPerformed(ActionEvent e) {
 		    	closeThisBoard();
 		    }
+		});
+
+		btnHint.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				if(hintRequested){
+					hintRequested = false;
+					clearHints();
+					btnHint.setText("Hint:Off");
+				}
+				else{
+					hintRequested = true;
+					btnHint.setText("Hint:On");
+					setSelectedMoveSource(selectedSource, selectedSourceCard);
+				}
+			}
 		});
 		
 
@@ -207,12 +212,45 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 
 	public void setSelectedMoveSource(ICardDeck deck, VisualCard sourceCard){
 		if(this.selectedSourceCard != null)
-			this.selectedSourceCard.setSelected(false);
-		if(sourceCard != null)
-			sourceCard.setSelected(true);
+			this.selectedSourceCard.setSelected(false);	
 		this.selectedSource = deck;		
 		this.selectedSourceCard = sourceCard;
 		this.setMultiMoveCard(null);
+
+		if(sourceCard != null){
+			sourceCard.setSelected(true);
+			if(this.hintRequested)
+				this.createHints();
+		}
+	}
+	private void createHints(){
+		ICardHint hint = this.boardModel.hintForCard(this.selectedSourceCard.toCardModel());
+		this.clearHints();
+		for(ICardDeck deck : hint.getCardDecks()){
+			for(VisualCardDeck visualCardDeck : this.decks){
+				if(deck.getName().equals(visualCardDeck.getName())){
+					VisualCard target = visualCardDeck.top();
+					target.setHintTarget(true);
+					this.hintTargets.add(target);
+				}
+			}
+		}
+
+		for(ICardStack stack : hint.getCardStacks()){
+			for(VisualCardStack visualCardStack : this.stacks){
+				if(stack.getName().equals(visualCardStack.getName())){
+					VisualCard target = visualCardStack.top();
+					target.setHintTarget(true);
+					this.hintTargets.add(target);
+				}
+			}
+		}
+	}
+
+	private void clearHints(){
+		while(!this.hintTargets.isEmpty()){
+			this.hintTargets.remove(0).setHintTarget(false);
+		}
 	}
 
 	public ICardDeck getSelectedMoveSource(){
@@ -237,7 +275,8 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	}
 	
 	public void loadFile(){
-		//load list of files in directory "saved"
+		// Load list of files in directory "saved"
+		// If this pathname does not denote a directory, then listFiles() returns null.
 		final String LOAD_DIR = "saves";
 		ArrayList<String> filesString = new ArrayList<String>();
 		File[] listOfFiles = new File(LOAD_DIR).listFiles(new FilenameFilter() { 
@@ -246,7 +285,6 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	            	return filename.endsWith(".board"); 
 	            }
 			} );
-		// If this pathname does not denote a directory, then listFiles() returns null.
 
 		// Inform user when there is not any saved game.
 		if(listOfFiles.length <= 0){

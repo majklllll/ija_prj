@@ -14,6 +14,7 @@ import src.share.ICard;
 
 public class VisualCardStack extends VisualAbstractDeck {
 	ICardStack stack;
+	VisualCard topCard;
 		
 	public void paint() {
 		int distance = VisualIcons.get().areIconsMinified() ? 15 : 30;
@@ -57,8 +58,8 @@ public class VisualCardStack extends VisualAbstractDeck {
 						}
 						else board.setSelectedMoveSource(stack, card);		    	
 				    }  
-				}); 
-			
+				});
+				this.topCard = card;
 			}
 			else{
 				// For all turned up cards (except the last one)
@@ -77,5 +78,9 @@ public class VisualCardStack extends VisualAbstractDeck {
 
 	public void setModel(ICardStack stackModel) {
 		stack = stackModel;		
+	}
+
+	public VisualCard top(){
+		return this.topCard;
 	}
 }
