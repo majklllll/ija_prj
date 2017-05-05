@@ -16,12 +16,12 @@ public class VisualCardDeck extends VisualAbstractDeck {
 			
 	public void paint() {
 		ICard stackCard = deck.top();
-		this.card = stackCard != null ?
+		VisualCard card = this.card = stackCard != null ?
 			new VisualCard(VisualCard.VisualCardColor.visualColor(stackCard.color()), stackCard.value(), x, y ) :
 			new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
 		board.add(this.card);	
 			
-		this.card.addMouseListener(new MouseAdapter()  
+		card.addMouseListener(new MouseAdapter()  
 		{  
 		    public void mouseReleased(MouseEvent e)  
 		    {  
@@ -32,10 +32,9 @@ public class VisualCardDeck extends VisualAbstractDeck {
 						board.getCommandBuilder().execute(command);
 						board.unselectedMoveSource();
 					}
+					else board.setSelectedMoveSource(deck, card);	
 				}		
-				else{
-					board.setSelectedMoveSource(deck, card);
-				}		    	
+				else board.setSelectedMoveSource(deck, card);	    	
 		    }  
 		}); 		
 	}
