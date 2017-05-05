@@ -14,7 +14,14 @@
   */
 package src.share;
 
+/**
+ * Interface indicating support for filling deck.
+ */
 public interface ISupportFill{
-
+        
+    /**
+     * Get color of card.
+     * @return color of card.
+     */
     public void fill(ICardDeck deck, int count);
 }

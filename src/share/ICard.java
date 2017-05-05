@@ -23,6 +23,9 @@ import java.lang.IllegalArgumentException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Interface for single card.
+ */
 public interface ICard extends Serializable{
 
     /**
@@ -89,22 +92,60 @@ public interface ICard extends Serializable{
         }
     }
 
-    // ICard interface itself.  
+    // ICard interface itself.
+    /**
+     * Get color of card.
+     * @return color of card.
+     */
     public ICard.Color color();
-
+     
+    /**
+     * Get value of card.
+     * @return value of card.
+     */
     public int value();
-
+     
+    /**
+     * Convert this card to string.
+     * @return string represent. of this card.
+     */
     public String toString();
-
+     
+    /**
+     * Copy this card.
+     * @return copy of card.
+     */
     public ICard clone();
-
+     
+    /**
+     * Compare values of cards
+     * @param c card withi value to check.
+     * @return true if values are similar.
+     */
     public int compareValue(ICard c);
-
+     
+    /**
+     * Have these cards similar color?
+     * @param c card with color to check.
+     * @return true if colors are similar.
+     */
     public boolean similarColorTo(ICard c);
-
+     
+    /**
+     * Is face of card turned up.
+     * @return true if card is turned up.
+     */
     public boolean isTurnedFaceUp();
-
+     
+    /**
+     * Turn face of card up.
+     * @return true if action was performed successfuly.
+     */
     public boolean turnFaceUp();
-
+    
+    /**
+     * Turn face of card down.
+     * @return true if action was performed successfuly.
+     */
     public boolean turnFaceDown();
 }

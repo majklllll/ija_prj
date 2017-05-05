@@ -14,7 +14,14 @@
   */
 package src.share;
 
+/**
+ * Interface for repainting user interface.
+ */
 public interface ISupportRepaint{
-
+          
+    /**
+     * Get color of card.
+     * @return color of card.
+     */
     public void repaint();
 }

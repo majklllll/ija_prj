@@ -14,15 +14,38 @@
   */
 package src.share;
 
+/**
+ * Interface for card repository.
+ */
 public interface ICardRepository extends ICardDeck, ISupportFill{
-
+     
+    /**
+     * Show next card in repository.
+     * @return if successful.
+     */
     public boolean showNext();
-
+    
+    /**
+     * Action hiding top card.
+     * @return if successful.
+     */
     public boolean hideTopCard();
-
+     
+    /**
+     * Action turning this repository over.
+     * @return if successful.
+     */
     public boolean turnOver();
-
+     
+    /**
+     * Get count of hidden cards.
+     * @return count of hidden cards.
+     */
     public int sizeHidden();
-
+     
+    /**
+     * Is any card hidden?
+     * @return if is true.
+     */
     public boolean isAnyHidden();
 }
