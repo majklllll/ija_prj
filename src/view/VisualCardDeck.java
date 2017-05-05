@@ -32,10 +32,12 @@ public class VisualCardDeck extends VisualAbstractDeck {
 						board.getCommandBuilder().execute(command);
 						board.unselectedMoveSource();
 					}
-					else board.setSelectedMoveSource(deck, card);	
+					else if(!deck.isEmpty()) 
+						board.setSelectedMoveSource(deck, card);	
 				}		
-				else board.setSelectedMoveSource(deck, card);	    	
-		    }  
+				else if(!deck.isEmpty()) 
+					board.setSelectedMoveSource(deck, card);	    	
+		    }
 		}); 		
 	}
 

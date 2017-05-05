@@ -9,14 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-
 import src.model.BoardModel;
 import src.controler.CommandBuilder;
 import src.controler.CommandRenew;
 import src.controler.ControlCommand;
 import src.controler.ICommand;
 import src.share.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -33,10 +31,11 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	private ICard selectedMultiMoveCard = null;
 	private VisualCard selectedSourceCard = null;
 	private boolean hintRequested = false;
+	private static final int ButtonWidth = 90;
+	private static final int ButtonHeight = 25;
 	
 	VisualBoard(IGameBoard bModel) {
 		this.setLayout(null);
-		//this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		boardModel = bModel;	
         commander = new CommandBuilder(bModel);
         bModel.registerObserver((ISupportRepaint)this);
@@ -46,23 +45,27 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 	public void paintAll() {
 		//initialize buttons
 		JButton btnUndo = new JButton("Undo");
-		btnUndo.setBounds(0, 5, 100, 25);
+		btnUndo.setBounds(0, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
 		this.add(btnUndo);
+
+		JButton btnRedo = new JButton("Redo");
+		btnRedo.setBounds(100, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
+		this.add(btnRedo);
 		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(110, 5, 100, 25);
+		btnSave.setBounds(200, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
 		this.add(btnSave);
 		
 		JButton btnLoad= new JButton("Load");
-		btnLoad.setBounds(220, 5, 100, 25);
+		btnLoad.setBounds(300, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
 		this.add(btnLoad);		
 		
 		JButton btnClose= new JButton("Close");
-		btnClose.setBounds(330, 5, 100, 25);
+		btnClose.setBounds(400, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
 		this.add(btnClose);	
 
-		JButton btnHint= new JButton("Hint:Off");
-		btnHint.setBounds(440, 5, 100, 25);
+		JButton btnHint= new JButton("Hint:" + (hintRequested ? "On" : "Off"));
+		btnHint.setBounds(500, 5, VisualBoard.ButtonWidth, VisualBoard.ButtonHeight);
 		this.add(btnHint);		
 		
 		//initialize cards
@@ -105,6 +108,15 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		    	ICommand command = new ControlCommand("undo");
+		    	getCommandBuilder().execute(command);
+		    }
+		});
+
+		// Add event handlers
+		btnRedo.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	ICommand command = new ControlCommand("redo");
 		    	getCommandBuilder().execute(command);
 		    }
 		});
@@ -196,8 +208,7 @@ public class VisualBoard extends JPanel implements ISupportRepaint {
 			//System.out.println(
 			MouseListener[] listeners = component.getMouseListeners();
 			for(MouseListener listener : listeners){
-				this.removeMouseListener(listener);
-				
+				this.removeMouseListener(listener);	
 			}	
 		}
 	}

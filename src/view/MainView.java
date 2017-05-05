@@ -81,10 +81,7 @@ public class MainView extends JFrame{
 		        //your actions
 		    	addBoard();
 		    }
-		});
-		
-		
-		
+		});	
 	}
 	
 	/* Create new board and add it */
@@ -100,13 +97,8 @@ public class MainView extends JFrame{
 			VisualBoard board = new VisualBoard(boardModel);
 			this.bottomPanel.add(board);
 			boards.add(board);
-			
-			
 			this.forceRepaint();
-			//System.out.println(getContentPane().getSize());
-			
 		}	
-		System.out.println(boards.size());
 	}
 
 	public void removeBoard(VisualBoard board) {
@@ -139,7 +131,6 @@ public class MainView extends JFrame{
 	private void initLayouts() {
 		layoutFull = new GridLayout(1, 1, 0, 0);
 		layout4Tiles = new GridLayout(2, 2, 0, 0);
-		
 	}
 	
 	public void changeLayout(GridLayout layout){
@@ -148,11 +139,4 @@ public class MainView extends JFrame{
 		//inform icon provider about this change
 		VisualIcons.get().setUsingMiniatures((layout == this.layout4Tiles));
 	}
-	
-	
-	
-	
 }
-
-
-

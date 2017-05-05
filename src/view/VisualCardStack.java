@@ -36,27 +36,6 @@ public class VisualCardStack extends VisualAbstractDeck {
 				{  
 				    public void mouseReleased(MouseEvent e)  
 				    {  
-						/*if(board.isMoveSourceSelected()){
-							ICommand command = null;
-							if(board.getMultiMoveCard() == null){
-								// Move one card.
-								ICardDeck source = board.getSelectedMoveSource();
-								command = new CommandMove(source, stack);
-								board.unselectedMoveSource();
-							}
-							else{
-								// Move many cards.	
-								ICardStack source = (ICardStack)board.getSelectedMoveSource();
-								command = new CommandMoveMulti(source, stack, board.getMultiMoveCard());
-								board.unselectedMoveSource();							
-							}
-
-							// Execute command xor set this as a source.
-							if(command.canExecute())
-								 board.getCommandBuilder().execute(command);
-							else board.setSelectedMoveSource(stack, card);
-						}
-						else board.setSelectedMoveSource(stack, card);	*/
 				    	moveStackHere(card);
 				    }  
 				});
@@ -77,9 +56,8 @@ public class VisualCardStack extends VisualAbstractDeck {
 		}
 		
 		//in a case if there are no cards left, add a blank one
-		if(stack.size() == 0){
-			
-			VisualCard card = new VisualCard( VisualCard.VisualCardColor.NONE, 0, x, y );
+		if(stack.size() == 0){		
+			VisualCard card = new VisualCard(VisualCard.VisualCardColor.NONE, 0, x, y );
 			board.add(card);
 			card.addMouseListener(new MouseAdapter()  
 			{  
@@ -90,6 +68,7 @@ public class VisualCardStack extends VisualAbstractDeck {
 			    	}
 			    }  
 			}); 
+			this.topCard = card;
 		}
 	}
 	
@@ -115,7 +94,6 @@ public class VisualCardStack extends VisualAbstractDeck {
 			else board.setSelectedMoveSource(stack, card);
 		}
 		else board.setSelectedMoveSource(stack, card);		
-		
 	}
 	
 
