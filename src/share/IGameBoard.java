@@ -39,6 +39,8 @@ public interface IGameBoard{
 
     public void createHints();
 
+    public ICardHint hintForCard(ICard card);
+
     public boolean save(String fileName);
 
     public boolean load(String fileName);
