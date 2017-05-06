@@ -77,7 +77,7 @@ test:
 		src.tests.KlondikeModelTester
 
 pack:
-	zip -r xhrstk02.zip src src/* doc doc/* lib examples Makefile build.xml readme.txt -x lib/*
+	zip -r xhrstk02.zip */* *
 
 clear: clean
 clean:
