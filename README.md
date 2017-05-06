@@ -1,2 +1,8 @@
 # ija_prj
-projekt do IJA
+Projekt do IJA
+
+Překlad:
+	ant compile
+
+Spuštění:
+	ant run

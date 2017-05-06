@@ -7,7 +7,21 @@
     <property name="dist" location="dest-client"/>
     
     <target name="clean">
-        <delete dir="${build}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${build}">
+                <include name="**/*"/>
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true">
+            <fileset dir="${doc}">
+                <include name="**/*"/>
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true">
+            <fileset dir="${dist}">
+                <include name="**/*"/>
+            </fileset>
+        </delete>
     </target>    
     
     <target name="compilesrc">
@@ -15,12 +29,12 @@
         <javac srcdir="${src}" destdir="${build}" classpath="${lib}/hamcrest-core-1.3.jar:${lib}/junit-4.12.jar:${src}" includeantruntime="false" />
     </target>
 
-    <target name="compile" depends="clean,compilesrc,doc">
-	    <copy todir="${build}/lib/resources">
-    	    <fileset dir="${lib}/resources"/>
-  	    </copy>
+    <target name="compile" depends="clean,compilesrc,doc">   
         <mkdir dir="${dist}"/>
         <mkdir dir="${dist}/saves"/>
+        <copy todir="${build}/lib/resources">
+    	    <fileset dir="${lib}/resources"/>
+  	    </copy>
 	    <copy todir="${dist}/resources">
     	    <fileset dir="${lib}/resources"/>
   	    </copy>

@@ -1,8 +1,0 @@
-Známé bugy
-
-load hry
-pozadí nothing s expected kartou uz nastavenou
-prázdný stack není zobrazen
-nelze dát kartu z target decku zpět do card stacku
-nelze umístit krále na prázdný card stack
-špatné přetypování ve VisualBoard z RepositoryModel na ICardStack (do této větve podmínky (ifu) by se němělo jít dostat)
