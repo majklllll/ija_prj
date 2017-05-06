@@ -1,7 +1,7 @@
 
 /**
   * File:       ICard.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -44,22 +44,43 @@ public interface ICard extends Serializable{
             this.cardValue = value;
         }
 
+        /**
+         * Convert card color to string representation.
+         * @return string representing color.
+         */
         public String toString(){
             return this.cardValue;
         }
 
+        /**
+         * Check if card color is DIAMON or HEART.
+         * @return true when color is HEART or DIAMOND. 
+         */
         public boolean isRed(){
             return this == ICard.Color.DIAMONDS || this == ICard.Color.HEARTS; 
         }
 
+         /**
+         * Check if card color is SPADES or CLUBS.
+         * @return true when color is SPADES or CLUBS. 
+         */
         public boolean isBlack(){
             return this == ICard.Color.CLUBS || this == ICard.Color.SPADES;
         }
 
+        /**
+         * Check if color is similar (red of black) to given color.
+         * @param color color to be compared with.
+         * @return true when both colors are red ot both are black.
+         */
         public boolean similarColorTo(ICard.Color c){
             return (this.isRed() && c.isRed()) || (this.isBlack() && c.isBlack());
         }
 
+        /**
+         * Convert enumeration to hashable list.
+         * @return hashable list containing all values of enumeration.
+         */
         public static String[] toHashList(){
             return hashableColorList;
         }

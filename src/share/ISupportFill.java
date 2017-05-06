@@ -1,7 +1,7 @@
 
 /**
   * File:       ISupportFill.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -15,13 +15,14 @@
 package src.share;
 
 /**
- * Interface indicating support for filling deck.
+ * Interface indicating support for filling deck with cards.
  */
 public interface ISupportFill{
         
     /**
-     * Get color of card.
-     * @return color of card.
+     * Fill deck with cards from another deck.
+     * @param deck deck from which should be cards taken.
+     * @param count count of inserted cards.
      */
     public void fill(ICardDeck deck, int count);
 }

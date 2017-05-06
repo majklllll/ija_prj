@@ -1,7 +1,7 @@
 
 /**
   * File:       ISupportRepaint.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -15,13 +15,13 @@
 package src.share;
 
 /**
- * Interface for repainting user interface.
+ * Interface required by observable class.
+ * Each observer has to implement these funtions.
  */
 public interface ISupportRepaint{
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * State of observable class changed, repaint observer.
      */
     public void repaint();
 }

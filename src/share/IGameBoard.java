@@ -1,7 +1,7 @@
 
 /**
   * File:       IGameBoard.java
-  * Author:     Jan Hrstka
+  * @author     Jan Hrstka
   * Login:      xhrstk02
   * University: BUT (Brno University of Technology)
   * Faculty:    FIT (Faculty of Information Technology)
@@ -18,91 +18,94 @@ package src.share;
 import java.util.ArrayList;
 
 /**
- * Interface for game board.
+ * Interface for game boards.
  */
 public interface IGameBoard{
          
     /**
-     * Get color of card.
-     * @return color of card.
+     * Register new observer.
+     * @param observer observer to be notified about changes.
      */
     public void registerObserver(ISupportRepaint observer);
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get card repository.
+     * @return card repository.
      */
     public ICardRepository getRepository();
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get deck at given position.
+     * @param index position of deck to be retrieved.
+     * @return deck at given position.
      */
     public ICardDeck getDeck(int index);
            
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get stack at given position.
+     * @param index position of stack to be retrieved.
+     * @return stack at given position.
      */
     public ICardStack getStack(int index);
            
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get count of decks in board.
+     * @return count of decks in board.
      */
     public int deckCount();
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get count of stacks in board.
+     * @return count of stacks in board.
      */
     public int stackCount();
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * Notify all observers about changes.
      */
     public void update();
           
     /**
-     * Get color of card.
-     * @return color of card.
+     * Check whenever is any nint availavle.
+     * @return true when there is at least one hint.
      */
     public boolean hintAvailable();
         
     /**
-     * Get color of card.
-     * @return color of card.
+     * Get hints for all cards.
+     * @return list of hints.
      */
     public ArrayList<ICardHint> getHints();
       
     /**
-     * Get color of card.
-     * @return color of card.
+     * Create hints for all cards.
      */
     public void createHints();
       
     /**
-     * Get color of card.
-     * @return color of card.
+     * Create card hint for give card.
+     * @param card card for which should be hint constructed.
+     * @return hint for given card.
      */
     public ICardHint hintForCard(ICard card);
       
     /**
-     * Get color of card.
-     * @return color of card.
+     * Save state of board into given file.
+     * @param fileName name of file into which shoud be board saved.
+     * @return true when board was saved successfuly.
      */
     public boolean save(String fileName);
      
     /**
-     * Get color of card.
-     * @return color of card.
+     * Load state of board from given file.
+     * @param fileName name of file from which shoud be board loaded.
+     * @return true when board was loaded successfuly.
      */
     public boolean load(String fileName);
     
     /**
-     * Get color of card.
-     * @return color of card.
+     * Check if game has ended.
+     * @return true when game is over.
      */
     public boolean isGameOver();
 }
